@@ -1,0 +1,9 @@
+button:disabled,button[disabled]{
+  border: 1px solid #DCDCDC !important;
+  background: #DCDCDC !important;
+  padding: 10px 30px !important;
+  font-size: var(--fs13) !important;
+  font-weight: var(--fw600) !important;
+  color: var(--base-contrast) !important;
+  text-transform: uppercase !important;
+  }

@@ -1,0 +1,190 @@
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="skn-modal-title">Edit - {{fordata?.api_name}}</h3>
+            <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-body">
+
+            <table class="w-100">
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">API Name</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.api_name"  placeholder="Enter API Name " class="skn-input" required>
+                    </td>
+                </tr>                
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Description</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.description"  placeholder="Enter API Description" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">API URL</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.api_url" placeholder="Enter API URL" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Endpoint</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.api_endpoint" placeholder="Enter Endpoint" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Source Path</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.source_path" placeholder="Enter API Source Path" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Destination Path</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.destination_path"  placeholder="Enter API Destination Path" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Stage Name</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.stage_name" placeholder="Enter Stage Name" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Input Parameters</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.input_params" placeholder="Enter Input Parameters" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Input Filter Field</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" placeholder="Enter Input Filter" [(ngModel)]="fordata.input_filter_fields" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Input Parameters Collecction</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.input_param_collection" placeholder="Enter Input Parameters Collection" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Output Parametrs</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.output_params" placeholder="Enter Output Parametrs" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Output Filter Field</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.output_filter_fields" placeholder="Enter Output Filter Field" class="skn-input" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Output Parameters Collection</label>
+                    </td>
+                    <td class="py-3">
+                        <input type="text" [(ngModel)]="fordata.output_param_collection" placeholder="Enter Output Parameters Collection" class="skn-input" required>
+                    </td>
+                </tr>
+
+            </table>
+
+            <div class="w-100 py-3 d-flex gap-3">
+                <div class="skn-check">
+                    <input class="form-check-input skn-check-input" type="checkbox"
+                    [checked]="fordata.is_ocr_req"
+                    id="{{'status-switch-ocr'}}"
+                    [(ngModel)]="fordata.is_ocr_req">
+                    <label class="skn-check-label" for="{{'status-switch-ocr'}}">
+                        &nbsp;&nbsp;OCR
+                    </label>
+                </div>
+                <div class="skn-check">
+                    <input class="form-check-input skn-check-input" type="checkbox" 
+                    [checked]="fordata.is_binary_req"
+                          id="{{'status-switch-req'}}"
+                          [(ngModel)]="fordata.is_binary_req">
+                    <label class="skn-check-label" for="{{'status-switch-req'}}">
+                        &nbsp;&nbsp;Binary
+                    </label>
+                </div>
+                <div class="skn-check">
+                    <input class="form-check-input skn-check-input" type="checkbox"
+                    [checked]="fordata.is_doc_ini"
+                    id="{{'status-switch-doc'}}"
+                    [(ngModel)]="fordata.is_doc_ini">
+                    
+                    <label class="skn-check-label" for="{{'status-switch-doc'}}">
+                        &nbsp;&nbsp; Doc Initialization
+                    </label>
+                </div>
+                <div class="skn-check">
+                    <input class="form-check-input skn-check-input" type="checkbox"
+                    [checked]="fordata.is_txt_ini"
+                    id="{{'status-switch-txt'}}"
+                    [(ngModel)]="fordata.is_txt_ini">
+
+                    <label class="skn-check-label" for="{{'status-switch-txt'}}">
+                        &nbsp;&nbsp;Text Initialization
+                    </label>
+                </div>
+                <div class="skn-check">
+                    <input class="form-check-input skn-check-input" type="checkbox"
+                    [checked]="fordata.is_it_for_contx"
+                    id="{{'status-switch-contx'}}"
+                    [(ngModel)]="fordata.is_it_for_contx">
+
+                    <label class="skn-check-label" for="{{'status-switch-contx'}}">
+                        &nbsp;&nbsp;For Initialization
+                    </label>
+                </div>
+            </div>
+            <!--===============================-->
+
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-footer">
+            <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            <button type="button" class="skn-filled-btn" data-bs-dismiss="modal" (click)="updateOrchestrationApi()">SUBMIT</button>
+        </div>
+        <!--===============================================================================================-->
+    </div>
+</div>

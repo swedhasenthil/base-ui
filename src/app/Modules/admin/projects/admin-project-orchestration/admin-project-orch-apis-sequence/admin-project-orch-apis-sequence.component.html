@@ -1,0 +1,96 @@
+
+<div class="text-left float-end">
+    <label class="mr-2 search-label"> Search:</label> 
+    <!-- <mat-form-field class="px-16" style="width: 60%" >     -->
+        <input matInput #filter  autocomplete="off"  [(ngModel)]="apiName" (ngModelChange)="applyFilter()"  style="width: 100% ;font-size: 12px !important;">
+      <!-- <mat-icon matSuffix>search</mat-icon> -->
+    <!-- </mat-form-field> -->
+  </div>
+  
+  <div class="col-12  table-container mt-5">
+    <table mat-table #table  [dataSource]="projectOrchestrationApis"   class="skn-table" cdkDropList [cdkDropListData]="projectOrchestrationApis"
+    (cdkDropListDropped)="dropTable($event)">
+  
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>  </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon style="pointer-events: all;" cdkDragHandle><img src="../assets/images/icon-move.svg"/></mat-icon>
+        
+      </td>
+    </ng-container>
+  
+    <!-- <ng-container matColumnDef="No">
+      <th mat-header-cell *matHeaderCellDef>Sl.No </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}}</td> 
+     </ng-container> -->
+  
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef  >API Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.api_name}} </td> 
+     </ng-container>
+    
+    <ng-container matColumnDef="apiUrl">
+      <th mat-header-cell *matHeaderCellDef  > API URL </th>
+      <td mat-cell *matCellDef="let element"> {{element.api_url}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef  > Description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="apiEndpoint">
+      <th mat-header-cell *matHeaderCellDef  > API Endpoint </th>
+      <td mat-cell *matCellDef="let element"> {{element.api_endpoint}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="pointer-events: none;" cdkDrag
+      [cdkDragData]="row"></tr>
+  </table>
+
+  <mat-paginator #paginator pageSize=5 [pageSizeOptions]="[10, 20, 50,100]" 
+        showFirstLastButtons></mat-paginator>
+  
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="skn-table-cnt">
+    <table id="myTable" class="skn-table"  datatable [dtOptions]="dtOptions[1]">
+        <thead>
+            <tr>
+                <th></th>
+                <th>API Name</th>
+                <th>API URL</th>
+                <th>Description</th>
+                <th>End Point</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr  *ngFor="let element of projectOrchestrationApis; index as i">
+                <td>
+                    <a href="#">
+                        <img src="../assets/images/icon-move.svg"/>
+                    </a>
+                </td>
+                <td title="{{element.name}}">{{element.name | truncate:[20, '...']}}</td>
+                <td title="{{element.api_url}}">{{element.api_url | truncate:[20, '...']}}</td>
+                <td>{{element.description}}</td>
+                <td title="{{element.api_endpoint}}">{{element.api_endpoint | truncate:[20, '...']}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div> -->

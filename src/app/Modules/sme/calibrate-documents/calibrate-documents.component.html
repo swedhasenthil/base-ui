@@ -1,0 +1,117 @@
+<div class="skn-add-doctype-cnt"><button type="button" class="skn-filled-btn d-block ms-auto" data-bs-toggle="modal"
+    data-bs-target="#addDocTypeModal" #openAddDocumentModel (click)="btnAddDocument()">Add New Document
+    Type</button></div>
+
+<div class="skn-table-cnt allTable">
+<table id="sknCalibrateTable" class="skn-table" datatable *ngIf="calibrateDocumentsList.length"
+    [dtOptions]="dtOptions">
+    <thead>
+        <tr>
+            <th scope="col" class="document_type">Document Type</th>
+            <th scope="col" class="last">Last Modified</th>
+            <th scope="col" class="count">Attribute Count</th>
+            <th scope="col" class="api">Model API</th>
+            <th scope="col" class="training">Training Data Set</th>
+            <th scope="col" class="golden">Golden Data Set</th>
+            <th scope="col" class="review">Review Data</th>
+            <th scope="col" class="status">Status</th>
+            <th scope="col" class="action"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let document of calibrateDocumentsList">
+            <td class="document_type" title="{{document.document_type}}">
+                {{document.document_type| truncate:[15, '...']}}
+            </td>
+            <td class="last">
+                {{document.updated_at | date:'d MMM YY HH:mm'}}
+            </td>
+            <td class="count">{{document.attributes.length}}</td>
+            <td class="api" style="cursor: pointer;"><span class="skn-text-success me-2">
+                    {{document.versioned_model_api?.name}}_v{{document.versioned_model_api?.version}}</span><img
+                    src="../assets/images/icon-arrow-up-green.svg">
+            </td>
+            <td class="training" style="cursor: pointer;"> <span (click)="onListTrainingDocumentsData(document)"
+                    class="skn-text-primary me-2">{{document.training_data_docs_count}}</span>
+                <label type="button" class="ml-2">
+                    <img src="../assets/images/icon-arrow-up-orange.svg">
+                    <input type="file" accept=".pdf,.png" multiple="false" style="display:none;"
+                        (change)="onUploadTrainingDocData($event.target,document)" #fileInputTd />
+                </label>
+            </td>
+            <td class="golden" style="cursor: pointer;">
+                <a (click)="listGoldenDataSetDocs(document)" (click)="listGoldenDataSetDocs(document)">
+                    <span class="skn-text-primary me-2">{{document.golden_data_docs_count}}</span>
+                </a>
+                <label type="button" class="ml-2">
+                    <img src="../assets/images/icon-arrow-up-orange.svg">
+                    <input type="file" accept=".pdf,.png" multiple="false" style="display: none;"
+                        (change)="onUploadGoldenDataDoc($event.target,document)" #fileInputGd />
+                </label>
+            </td>
+            <td style="cursor: pointer;" class="review">
+                <!-- <a>
+                <span class="skn-text-primary me-2">{{document.review_data_docs_count}}</span> -->
+                <a>
+                    <span class="skn-text-primary me-2"
+                        (click)="onListReviewDocumentsData(document)">{{document.review_data_docs_count}}</span>
+                </a>
+            </td>
+            <td style="cursor: pointer;" class="status"><span style="display:none">{{document.isActive}}</span>
+                <div class="form-check form-switch skn-switch-green">
+                    <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch"
+                        (change)="onChangeDocumentStatus($event.target, document)" [checked]="document.isActive">
+                </div>
+                <span style="display:none">{{document.isActive}}</span>
+
+            </td>
+            <td style="cursor: pointer;" class="action">
+                <a data-bs-toggle="modal" data-toggle="tooltip" title="Duplicate" data-bs-target="#duplicateModal"
+                    (click)="duplicateDocument(document)"><img src="../assets/images/copy-icon.svg"
+                        class="skn-config-edit-icon skn-action-icon me-3" /></a>
+                <a data-bs-toggle="modal" data-toggle="tooltip" title="Edit" (click)="btnEdit(document)" data-bs-toggle="modal"
+                data-bs-target="#addDocTypeModal"><img
+                        src="../assets/images/icon-edit.svg"
+                        class="skn-config-edit-icon skn-action-icon me-3" /></a>
+                <a (click)="deleteDocument(document)" data-bs-toggle="modal" data-toggle="tooltip" title="Delete"
+                    data-bs-target="#deleteDocuemnt"><img src="../assets/images/icon-trash.svg"
+                        class="skn-config-edit-icon skn-action-icon " /></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<app-add-new-and-edit-document ></app-add-new-and-edit-document>
+<!--=======================================================================================================-->
+
+<div class="modal fade" id="duplicateModal" tabindex="-1" aria-labelledby="duplicateModal" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="skn-modal-title">Duplicate Document</h3>
+            <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                aria-label="Close">
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Document Name</label>
+                    <input type="text" class="skn-input" [(ngModel)]="duplicateDocumentName" />
+                </div>
+            </div>
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-footer border-0">
+            <button type="button" #deleteModel class="skn-transparent-btn" #closeDuplicateModel
+                data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="skn-filled-btn" (click)="createDuplicateDocument()"
+                data-bs-dismiss="modal">Create Document</button>
+        </div>
+        <!--================================================================================================-->
+    </div>
+</div>
+</div>
+
+

@@ -1,0 +1,114 @@
+<div class="skn-table-cnt mt-2 allTable">
+  <table id="sknConfigTable" class="skn-table" style="width: 100% !important">
+    <thead>
+      <tr>
+        <th>Project Name</th>
+        <th data-orderable="false">Project Description</th>
+        <th>Start Date</th>
+        <th>Status</th>
+        <th>Documents Processed</th>
+        <th>Enable Review</th>
+        <th>Bypass Analyst</th>
+        <th>Preview Image</th>
+        <th>QC %</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <ng-container *ngFor="let lists of masterJsonArr;let masterIndex = index;">
+        <tr>
+          <td class="cursor-pointer ">
+            <a style="color: black !important" 
+              (click)="expand(masterIndex,lists); projectClicked($event,masterIndex,lists);"
+              title=""
+              [ngClass]="{'bi-chevron-up':lists.isExpanded === 'true','bi-chevron-down':lists.isExpanded === 'false'}"
+              ngDefaultControl>&nbsp;&nbsp;{{lists.projectName}}</a>
+     
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="lists.projectName" name="{{ lists.projectName }}" class="skn-input" />
+          </td>
+          <td>
+            {{ lists.startDate | date : "d MMM YY HH:mm" }}
+          </td>
+          <td class="cursor-pointer">
+            <span class="badge skn-status-badge-completed-filled">{{
+              lists.status
+              }}</span>
+          </td>
+          <td >
+            {{ lists.processedDoc == null ? 0 : lists.processedDoc }}
+          </td>
+          <td>
+            <div class="form-check form-switch skn-switch-green cursor-pointer">
+              <input (change)="reviewStatusChange($event.target, masterIndex)"
+                class="form-check-input skn-switch-green-input" type="checkbox" role="switch"
+                [checked]="lists.review_status" />
+            </div>
+          </td>
+          <td>
+            <div class="form-check form-switch skn-switch-green cursor-pointer">
+              <input (change)="analystBypassChange($event.target, masterIndex)"
+                class="form-check-input skn-switch-green-input" type="checkbox" role="switch"
+                [checked]="lists.analyst_bypass" />
+            </div>
+          </td>
+          <td>
+            <select class="skn-select" [(ngModel)]="lists.preview_image"
+              (change)="previewImageChange($event.target, masterIndex)">
+              <option>Same Window</option>
+              <option>New Window</option>
+            </select>
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="lists.qc_percent" class="skn-input w-50px" />
+          </td>
+
+          <td class="col-1 cursor-pointer" >
+            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Play" *ngIf="lists.state == 'Pause'"
+              (click)="onActionButtonClick(lists.state, masterIndex)"><img src="../assets/images/icon-play.svg"
+                class="skn-config-edit-icon skn-action-icon me-3" /></a>
+            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Start" *ngIf="lists.state == 'Start'"
+              (click)="onActionButtonClick(lists.state, masterIndex)"><img src="../assets/images/icon-pause.svg"
+                class="skn-config-edit-icon skn-action-icon" /></a>
+
+            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Work Flow" *ngIf="lists.state == 'Pause'"
+              (click)="onActionWorkflow(lists)"><img src="../assets/images/icon-workflow.svg"
+                class="skn-config-edit-icon skn-action-icon" /></a>
+          </td>
+        </tr>
+        <tr *ngIf="lists.isExpanded === 'true'">
+          <td colspan="11">
+            <table class="skn-sub-table table">
+              <thead>
+                <tr>
+                  <th>Document Type</th>
+                  <th>Document Description</th>
+                  <th></th>
+                  <th>Attributes</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+               <tbody>
+                <app-expand-row style="display:contents" [masterIndex]=masterIndex [masterJsonArr]="masterJsonArr" [types]=types [listsOfProject]="lists" [fetchedData]="fetchedData" [docTypeUnderProject]="docTypeUnderProject"></app-expand-row>
+              </tbody> 
+            </table>
+        
+          </td>          <!-- </tr> -->
+        </tr>
+
+      </ng-container>
+    </tbody>
+
+  </table>
+</div>
+
+
+<!-- delete document type -->
+
+
+
+

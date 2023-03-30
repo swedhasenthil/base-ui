@@ -1,0 +1,158 @@
+
+ <div class="skn-top-filterbar">
+    <!-- <div>
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">Versions of Models:</div>
+            <select class="btn dropdown-toggle" [(ngModel)]="selectedName" (ngModelChange) ="filterModelName($event)">
+                <option *ngFor="let item of filterModelApis; let i = index" value="{{item}}">
+                    {{item}}
+                </option>
+                <option value="All" class="dropdown-item">All</option>
+                
+            </select>
+        </div>
+    </div> -->
+    <!--=======================================================================================================================-->
+    <button type="button" class="skn-filled-btn d-block ms-auto" data-bs-toggle="modal" data-bs-target="#createVersionedAPIModal">Create New Version</button>
+    
+</div>
+<!-- ======================================================= filterbar-ends-here =================================================== -->
+
+      
+    <div class="skn-table-cnt allTable">
+        <table id="sknCognitiveTable" datatable [dtOptions]="dtOptions" class="skn-table" *ngIf="versionModal" >
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Attributes</th>
+                    <th>Endpoint</th>
+                    <th>Last Active</th>
+                    <th>Created</th>
+                    <th >Benchmarked</th>
+                    <th >Benchmark Accuracy &nbsp;&nbsp;</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let verModelApi of versionedModelApis; index as i" >
+                    <td>{{verModelApi.name}}_v{{verModelApi.version}}</td>
+                    <td>
+                        <div *ngIf="verModelApi.attributes.length < 2 || verModelApi.attributes.length == 2">{{verModelApi.attributes.join(', ')}}</div>
+                        <div *ngIf="verModelApi.attributes.length > 2" (click)="expandMoreRow(verModelApi)">{{verModelApi.attributes[0] + ', ' + verModelApi.attributes[1] + ', ' + verModelApi.attributes[2] + '...'}}
+                           <span class="view-all-span" data-bs-toggle="modal" data-bs-target="#moreRow" >{{verModelApi.attributes.length -3}} more</span>
+                        </div>
+                    </td>
+                    <td>{{verModelApi.endpoint}}</td>
+                    <td>{{verModelApi.updated_at | date:'d MMM YY HH:mm'}}</td>
+                    <td>{{verModelApi.created_at | date:'d MMM YY HH:mm'}} </td>
+                    <td> {{verModelApi?.benchmark?.updated_at | date:'d MMM YY HH:mm'}}</td>
+                    <td >
+                        <span>{{getBenchmarkAccuracy(verModelApi)}}</span>
+                        <span class="status">{{getBenchmarkStatus(verModelApi)}}</span>
+                        <a class="cursor-pointer" (click)="benchmarkThisVersionedModelApi(verModelApi)"><img src="../assets/images/icon-play.svg" class="skn-config-edit-icon ms-3"/></a></td>
+                    <td> <div class="form-check form-switch skn-switch-green" >
+                        <input class="form-check-input skn-switch-green-input" type="checkbox"  [checked]="verModelApi?.is_active === true"
+                     (change)="onChangeVersionedApiStatus($event.target, verModelApi)">
+                     <span style="display:none">{{verModelApi.is_active}}</span>
+                    </div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- ==================================================================== table-ends-here ======================================================== -->
+  
+    <div class="modal fade" id="moreRow" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="skn-modal-title">View Attributes</h3>
+                    <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-body modal-body-text">
+                    <table class="w-100" *ngIf="expandData">
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Model API Name </label>
+                            </td>
+                            <td class="py-3">
+                                <p class="mb-0">{{expandData.name}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Attributes  </label>
+                            </td>
+                            <td class="py-3">
+                                <p class="mb-0">{{expandData.attributes.join(', ') }}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-footer">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+                <!--================================================================================================-->
+            </div>
+        </div>
+    </div>
+     <!-- Create Versioned Model API Modal -->
+     <div class="modal fade" id="createVersionedAPIModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="skn-modal-title">Create Versioned Model API</h3>
+                    <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-body modal-body-text">
+                    <table class="w-100">
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Model API Name</label>
+                            </td>
+                            <td class="py-3">
+                                <p *ngIf="modelApi" class="mb-0">{{ modelApi.name }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Attributes</label>
+                            </td>
+                            <td class="py-3">
+                                <p *ngIf="modelApi" class="mb-0">{{ modelApi.attributes.join(', ') }}</p>
+                            </td>
+                        </tr>                       
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Status</label>
+                            </td>
+                            <td class="py-3">
+                                <div class="form-check form-switch skn-switch-green">
+                                    <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch" [checked]="is_active" (change)="changedStatus()">
+                                 
+                                </div>
+                            </td>
+                        </tr>                        
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Endpoint</label>
+                            </td>
+                            <td class="py-3">
+                                <input type="text" placeholder="" class="skn-input" required [(ngModel)]="endPoint">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-footer">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="button" class="skn-filled-btn" (click)="submitModalApiVersion()" data-bs-dismiss="modal">SUBMIT</button>
+                </div>
+                <!--================================================================================================-->
+            </div>
+        </div>
+    </div>
+    <!--=======================================================================================================-->
+    

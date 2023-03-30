@@ -1,0 +1,401 @@
+<div class="skn-top-filterbar align-items-center">
+    <button type="button" class="skn-filled-btn ms-auto" data-bs-toggle="modal" data-bs-target="#createProjectModal" 
+                (click)="projectSubmitValuesClear()">CREATE NEW PROJECTS</button>
+</div>
+
+<div class="skn-table-cnt projecTable" >
+    <table style="width: 99%;"  id="myTable" class="skn-table"  id="projectListTable" datatable [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th scope="col" class="name">Project Name</th>
+                <th scope="col" class="last_updated">Last Updated</th>
+                <th scope="col" class="source">Document Source</th>
+                <th scope="col" class="destination">Destination</th>
+                <th scope="col" class="user_group">User Group</th>
+                <th scope="col" class="document">Documents</th>
+                <th scope="col" class="assign_task">Assign Tasks</th>
+                <th scope="col" class="display_time">Display Timer</th>
+                <!-- <th>Auto Save</th> -->
+                <th scope="col" class="status">Status</th>
+                <th class="action"></th>
+            </tr>
+        </thead>
+        <tbody class="dataTableBody">
+            <tr *ngFor="let project of projects; index as i">
+                <td class="name" title="{{ project.project_name }}"><a href="#projectStatusModal" data-bs-toggle="modal" class="skn-text-primary text-decoration-none"
+                     (click)="viewProjectDetails($event.target, project)"> {{project.project_name | truncate:[12, '...'] }}</a>
+                </td>
+                <td class="last_updated">
+                    <!--  date:'yyyy-MM-dd HH:mm' -->
+                    {{project.start_date | date:'dd MMM YY HH:mm' }} 
+                </td>
+                <td class="source" title="{{project.document_source}}">{{project.document_source | truncate:[10, '...'] }}</td>
+                <td  class="destination" title="{{project.destination}}">{{project.destination | truncate:[10, '...']}}</td>
+                <td class="user_group" title="{{groupsObjectById[project.user_group_id]}}">{{groupsObjectById[project.user_group_id] | truncate:[10, '...'] }} </td>
+                <td class="document">{{project.number_of_documents}} </td>
+                <td class="assign_task">
+                    <select class="skn-select"
+                            [(ngModel)]="project.task_assignment"
+                            (change)="assignTaskChange($event.target,project)">
+                        <option>Auto</option>
+                        <option>Manual</option>
+                    </select>
+                </td>
+                <td class="display_time">
+                    <div class="form-check form-switch skn-switch-green">
+                        <input type="checkbox" class="form-check-input skn-switch-green-input"  role="switch" 
+                                (change)="changeDisplayTimer($event.target, project)"
+                                [checked]="project.timer_display==true" id="{{'status-switch-'+i}}">
+                        <label class="custom-control-label" for="{{'status-switch-'+i}}"></label>
+                    </div>
+                </td>
+                 <!-- <td>
+                    <div class="form-check form-switch skn-switch-green">
+                        <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch" checked>
+                    </div>
+                </td> -->
+                <td class="status">
+                    <div class="form-check form-switch skn-switch-green">
+                        <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch"
+                                (change)="changeProjectStatus($event.target, project)"
+                                [checked]="project.status=='active'" id="{{'status-switch1-'+i}}">
+                        <label class="custom-control-label" for="{{'status-switch1-'+i}}"></label>
+                    </div>
+                </td>
+               
+                <td style="cursor: pointer;"  >
+                    <a (click)="orchestration(project)">
+                        <img src="../assets/images/icon-settings.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Workflow Orchestration">
+                    </a>
+                    <a href="#editProjectModal" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit"
+                        (click)="onEditButtonClick($event.target, project)">
+                    </a>
+                    <a href="#deleteProjectModal" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"
+                        [ngClass]="{ 'disable-click' : (project.number_of_documents != 0), 'text-danger' : (project.number_of_documents == 0) }"
+                        (click)="onDeleteButtonClick($event.target, project)">
+                    </a>
+                </td>
+            </tr> 
+
+        </tbody>
+    </table>
+</div>
+
+<!-- Delete Project Modal -->
+<div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteTabConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete project '{{deleteProjectName}}'?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="onDeleteProjectClick(deleteProjectId)" data-bs-dismiss="modal">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+<div class="modal fade" id="projectStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Project Status : {{projectDetailedView.name}}</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <!-- <div class="modal-body-resoure p-0">    -->
+            <div class="modal-body p-0">   
+
+
+                <div class="w-100 d-flex gap-3 p-3">
+                    <div class="skn-proj-stat-card skn-bg-danger">
+                        <div>Failed Documents</div>
+                        <div>{{projectPerformanceObject.failed}}%</div>
+                    </div>
+                    <div class="skn-proj-stat-card skn-bg-warning">
+                        <div>Documents In-Progress </div>
+                        <div>{{projectPerformanceObject.in_process}}%</div>
+                    </div>
+                    <div class="skn-proj-stat-card skn-bg-success">
+                        <div> Documents Ready </div>
+                        <div>{{projectPerformanceObject.processed}}%</div>
+                    </div>
+                </div>
+                <!-- =============================================================================================== -->
+
+                <div class="w-100 overflow-auto  modelTable">
+                    <table id="sknProjStatusTable" class="skn-table"  datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger1">
+                        <thead>
+                            <tr>
+                                <th class="no-sort">
+                                    <div class="skn-check">
+                                        <input class="form-check-input skn-check-input" type="checkbox" (change)="selectAllFailedDocuments($event)"  id="isCheckAlls"
+                                        [checked]="isCheckAlls">
+                                        <!-- <span style="display: none;"></span> -->
+
+                                    </div>
+                                </th>
+                                <th class="skn-modal-field-label-2">Documents</th>
+                                <th class="skn-modal-field-label-2">Uploaded On</th>
+                                <th class="skn-modal-field-label-2">Last Modified</th>
+                                <th class="skn-modal-field-label-2">Assigned To</th>
+                                <th class="skn-modal-field-label-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let projectDocument of projectDocumentDetailsObject; let i = index;">
+                                <td>
+                                    <div class="skn-check">
+                                        <input class="form-check-input skn-check-input" type="checkbox"   #checkboxRight
+                                        [disabled]="projectDocument.document_status !== 'failed'"
+                                        (change)="updateFailedDocsSelectedForReprocess(projectDocument._id,$event)"
+                                        [(ngModel)]="projectDocument.state">
+                                    </div>
+
+                                </td>
+                                <td>{{projectDocument.document_name}}</td>
+                                <td>{{projectDocument.uploaded_timestamp | date:'dd MMM HH:mm '}}</td>
+                                
+                                 <td> 
+                                    <!-- <span style="display: none;">{{projectDocument.last_modified_timestamp | date:'yyyy-MM-dd HH:mm'}}</span> -->
+                                            {{projectDocument.last_modified_timestamp | date:'dd MMM HH:mm'}}
+                                </td>
+                                <td>{{projectDocument.user_id ? projectDocument.user_id.user_name : 'NA'}}</td>
+                                
+                                <td>
+                                   <!-- <a (click)="getDocumentStatus(projectDocument)"
+                                        *ngIf="projectDocument.isAnchor" href="/admin/status" target="_blank">
+                                        {{getMetadataValue(projectDocument.document_status,true)}}
+                                    </a>
+                                     <span *ngIf="!projectDocument.isAnchor">{{getMetadataValue(projectDocument.document_status,true)}}</span> -->
+                                    <span >{{getMetadataValue(projectDocument.document_status,true)}}</span>
+                                 </td>
+                            </tr>                           
+                        </tbody>
+                    </table>
+                </div>
+                <!--===========================================================================================-->
+
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="reprocessFailedDocuments()">REPROCESS SELECTED DOCUMENTS</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+
+<!-- Edit Project Modal -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Edit Project</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close"
+                (click)="onCreateFormCancelClick()">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+                <form action="" [formGroup]="editProjectForm" (ngSubmit)="onEditFormSubmit()" autocomplete="off"
+                    class="edit-project-form" method="post" accept-charset="utf-8">
+                    <table class="w-100">
+
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Project Name</label>
+                            </td>
+                            <td class="py-3">
+                                <span *ngIf="projectResultFalse" style="color: red; font-size: 12px; margin-left: 15px;">Given
+                                    project name already exists</span>
+                                <input type="text" placeholder="UwDigiWorkbench" class="skn-input" 
+                                [ngClass]="{'valid': projectResultTrue, 'invalid': projectResultFalse, 'loading': projectResultLoad }"
+                                    formControlName="editProjectName" value="editProjectObject.project_name"
+                                    (blur)="onLostFocusFormProjectName($event.target)">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Add Source Path</label>
+                            </td>
+                            <td class="py-3">
+                                <span *ngIf="sourceResultFalse" style="color: red; font-size: 12px; margin-left: 15px;">Invalid
+                                    Path</span>
+                                <input type="text" class="skn-input"  [ngClass]="{'valid': sourceResultTrue, 'invalid': sourceResultFalse, 'loading': sourcePathLoad }"
+                                        formControlName="editSourcePathInput" value="editProjectObject.document_source"
+                                        (blur)="onLostFocusFormSourcePath($event.target)">
+                                <span  id="sourcePathInputHelp" class="skn-field-note">Add the path from where skense can lookout for source data</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Add Destination Path</label>
+                            </td>
+                            <td class="py-3">
+                                <span *ngIf="destinationResultFalse" style="color: red; font-size: 12px; margin-left: 15px;">Invalid Path</span>
+                                <input type="text"  class="skn-input"   [ngClass]="{'valid': destinationResultTrue, 'invalid': destinationResultFalse, 'loading': destinationPathLoad }"
+                                      formControlName="editDestinationPathInput" value="editProjectObject.destination"
+                                      (blur)="onLostFocusFormDestinationPath($event.target)">
+                                <span id="destinationPathInputHelp" class="skn-field-note">Add the path from where source files can copied data for processing</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Add Reject Folder Path*</label>
+                            </td>
+                            <td class="py-3">
+                                <span *ngIf="rejectFolderResultFalse" style="color: red; font-size: 12px; margin-left: 15px;">Invalid Path</span>
+                                <input type="text"  class="skn-input"  [ngClass]="{'valid': rejectFolderResultTrue, 'invalid': rejectFolderResultFalse, 'loading': rejectPathLoad }"
+                                formControlName="editRejectfolderPathInput" value="editProjectObject.reject_path"
+                                (blur)="onLostFocusFormRejectFolderPath($event.target)">
+                                <span id="rejectfolderPathInputHelp" class="skn-field-note">Add the path for reject folder</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Assign Group</label>
+                            </td>    
+                            <td class="py-3">
+                                <select class="skn-select" formControlName="editAssignGroup">
+                                    <option *ngFor="let group of groupsObjectById | keyvalue">{{group.value}}</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" (click)="onCreateFormCancelClick()">CANCEL</button>
+                <button type="button" class="skn-filled-btn" [disabled]="projectResultFalse || sourceResultFalse || destinationResultFalse || rejectFolderResultFalse"
+                (click)="onEditFormSubmit()" data-bs-dismiss="modal"  >SUBMIT</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+<!-- Create New Project Modal -->
+<div class="modal fade" id="createProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Create New Project</h3>                
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close"
+                  (click)="onCreateFormCancelClick()">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+
+                <div *ngIf="!projectSubmitSuccesful && !duplicateProjectSubmit">
+                    <form action="" [formGroup]="createProjectForm" autocomplete="off" class="create-project-form"
+                        method="post" accept-charset="utf-8">
+
+                        <table class="w-100">
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Project Name</label>
+                                </td>
+                                <td class="py-3">
+                                    <span *ngIf="projectResultFalse"
+                                    style="color: red; font-size: 12px; margin-left: 15px;">Given project name already
+                                    exists</span>
+                                    <input type="text" placeholder="" class="skn-input" 
+                                    [ngClass]="{'valid': projectResultTrue, 'invalid': projectResultFalse, 'loading': projectResultLoad }"
+                                    formControlName="projectName" id="projectName" (blur)="onLostFocusFormProjectName($event.target)">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Add Source Path*</label>
+                                </td>
+                                <td class="py-3">
+                                    <span *ngIf="sourceResultFalse"
+                                    style="color: red; font-size: 12px; margin-left: 15px;">Invalid Path</span>
+                                    <input type="text"  [ngClass]="{'valid': sourceResultTrue, 'invalid': sourceResultFalse, 'loading': sourcePathLoad }"
+                                    formControlName="sourcePath" id="sourcePath"(blur)="onLostFocusFormSourcePath($event.target)"
+                                     placeholder="" class="skn-input" required>
+                                    <span id="emailHelp2" class="skn-field-note">Add the path from where skense can lookout for source data</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Add Destination Path*</label>
+                                </td>
+                                <td class="py-3">
+                                     <span *ngIf="destinationResultFalse"
+                                          style="color: red; font-size: 12px; margin-left: 15px;">Invalid Path</span>
+                                    <input type="text" placeholder="" class="skn-input" 
+                                            [ngClass]="{'valid': destinationResultTrue, 'invalid': destinationResultFalse, 'loading': destinationPathLoad }"
+                                            formControlName="destinationPath" id="destinationPath"  (blur)="onLostFocusFormDestinationPath($event.target)">
+                                    <span class="skn-field-note">Add the path from where source files can copied data for processing</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Add Reject Folder Path*</label>
+                                </td>
+                                <td class="py-3">
+                                    <span *ngIf="rejectFolderResultFalse" style="color: red; font-size: 12px; margin-left: 15px;">Invalid Path</span>
+                                    <input type="text" placeholder="" class="skn-input" 
+                                           [ngClass]="{'valid': rejectFolderResultTrue, 'invalid': rejectFolderResultFalse, 'loading': rejectPathLoad }"
+                                           formControlName="rejectfolderPath" id="rejectfolderPath" (blur)="onLostFocusFormRejectFolderPath($event.target)">
+                                    <span class="skn-field-note">Add the path for reject folder</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Assign Group*</label>
+                                </td>    
+                                <td class="py-3">
+                                    <select class="skn-select"  formControlName="groupDropdown" id="groupDropdown">
+                                        <option selected hidden>Select a Group</option>
+                                        <option *ngFor="let group of groupsObjectById | keyvalue">{{group.value}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                </form>
+            </div>
+
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer" *ngIf="!projectSubmitSuccesful && !duplicateProjectSubmit" >
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" (click)="onCreateFormCancelClick()">CANCEL</button>
+                <!-- <button type="button" [ngClass]="{'skn-filled-btn' : createProjectForm.valid ,'skn-outline-btn': !createProjectForm.valid}"
+                 [disabled]="!createProjectForm.valid && !projectResultTrue || !sourceResultTrue || !destinationResultTrue || !rejectFolderResultTrue"
+                (click)="onCreateFormSubmit()"  data-bs-dismiss="modal">SUBMIT</button> -->
+               
+               <button type="button" class="skn-filled-btn" data-bs-toggle="modal" data-bs-target="#sumbitChangesModal" [disabled]="!createProjectForm.valid" (click)="onCreateFormSubmit()" >SUBMIT</button>
+
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->

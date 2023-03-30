@@ -1,0 +1,127 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { LoginService } from '../login.service';
+import { AuthService } from '../../../core/auth.service';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+  formLogin: FormGroup;
+  submited: boolean = false;
+  isInvalidUser: boolean = false;
+  loginDetails:any=[];
+  constructor(private fb: FormBuilder, private router: Router, private loginService: LoginService,private toastr: ToastrService, private authService:AuthService) { 
+}
+
+  ngOnInit(): void {
+    this.formLogin = this.fb.group({
+      userName: ['', Validators.required],
+      password: ['', Validators.required]
+    })
+    localStorage.removeItem('currentUserRoleName');
+
+  }
+
+
+  get f() { return this.formLogin.controls }
+
+  login() {
+    this.submited = true;
+    const payload = {
+      email_id: this.formLogin.value.userName,
+      password: this.formLogin.value.password,
+    };
+
+    this.loginService.login(payload).subscribe((res: any) => {
+      if (res) {
+        const loginDetails = res['userDetails'];
+        console.log("loginDetails", JSON.stringify(loginDetails));
+        
+        localStorage.setItem('loginDetails', JSON.stringify(loginDetails))
+        localStorage.setItem('user_name', loginDetails.user_name);
+        
+        localStorage.setItem('jwtToken', res['access_token']);
+        localStorage.setItem('currentUserRoleId',loginDetails['roles'][0]['id'])
+        let role = loginDetails['roles'][0];
+        localStorage.setItem(
+          'currentUserRoleName',role.name
+        );
+       // console.log(res['access_token'])
+        this.isInvalidUser=false;
+        this.toastr.success("User login successfully")
+
+        // this.notificationService.checkRoleAndConfigureNotification(loginDetails['userDetails']['roles']);
+
+        switch (role.name) {
+          case 'Admin':
+            //this.router.navigate(['/user-dashboard'], { replaceUrl: true });
+            break;
+          case 'Analyst L1' || 'Analyst L2':
+            this.router.navigate(['/analyst'], { replaceUrl: true });
+          
+            break;
+          case 'SME':
+            this.router.navigate(['/sme'], { replaceUrl: true });;
+            break;
+          case 'QC L1' || 'QC L2':
+            //this.router.navigate(['/user-dashboard'], { replaceUrl: true });
+            break;
+
+          case 'Manager':
+            //this.router.navigate(['/user-dashboard'], { replaceUrl: true });
+            break;
+          case 'Doc Specialist':
+            //this.router.navigate(['/user-dashboard'], { replaceUrl: true });
+            break;
+          default:
+            this.router.navigate(['/login'], { replaceUrl: true });
+            break;
+        }
+        this.setData();
+        
+      }
+    },
+    err => {
+      this.toastr.error("Invalid User")
+      this.isInvalidUser=true
+     // this.toastr.error(err.error.message);
+    }
+    )
+  }
+  setData(){    
+    var sessionData = localStorage.getItem("loginDetails")
+    this.loginDetails = JSON.parse(sessionData || '{}')
+    console.log("this.loginDetails Snehith", this.loginDetails);
+    
+    
+    this.authService.setCurrentUserId(
+      this.loginDetails._id
+    );
+    this.authService.setCurrentUserRoleName(
+      this.loginDetails.roles[0].name
+     
+    );
+   // console.log("login role",this.loginDetails.roles[0].name)
+    // this.authService.setCurrentUserRoleName('sme');
+    this.authService.setCurrentUserRoleId(
+      this.loginDetails.roles[0].id
+    );
+    localStorage.setItem(
+      'currentUserId',
+      this.loginDetails._id
+    );
+    localStorage.setItem(
+      'currentUserRoleName',
+      this.loginDetails.roles[0].name
+    );
+    console.log("role",   this.loginDetails.roles[0].name)
+    localStorage.setItem('currentUserRoleId', this.loginDetails.roles[0].id);
+    
+  }
+
+}

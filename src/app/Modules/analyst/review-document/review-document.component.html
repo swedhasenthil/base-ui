@@ -1,0 +1,12 @@
+<!-- <div class="skn-review-body" *ngIf="(displayList != true && displayInvoice != true) || (userHasProjects && diplayInfo)"> -->
+<div class="skn-review-body">
+  <div class="skn-review-components-cnt">
+    <app-canvas-thumbnails [document]="document"></app-canvas-thumbnails>
+ 
+    <app-canvas-document [document]="document" *ngIf="isCanvasVisible"></app-canvas-document>
+  
+    <div class="skn-review-tabs-cnt">
+    <app-attributes [document]="document"></app-attributes>
+  </div>
+  </div>
+</div>

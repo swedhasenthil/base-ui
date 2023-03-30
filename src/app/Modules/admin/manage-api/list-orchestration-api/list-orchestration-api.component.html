@@ -1,0 +1,133 @@
+<div class="skn-table-cnt listApi overflow-auto">
+    <table id="myTable" class="skn-table" datatable [dtOptions]="dtOptions" *ngIf="orchestrationApi == true">
+        <thead>
+            <tr>
+                <th  class="no">Sl No.</th>
+                <th class="name">API Name</th>
+                <th class="url">API URL</th>
+                <th class="des">Description</th>
+                <th class="end">End Point</th>
+                <th class="source" >Source Path</th>
+                <th class="dest">Destination Path</th>
+                <th class="input" >Input Parameters</th>
+                <th class="output" >Output Parameters</th>
+                <th class="action" ></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let orchestrationApi of orchestrationApis; let i = index ;">
+                <td  class="no">{{i+1 }} </td>
+                <td  class="name truncate" style="max-width: 10ch; "  title="{{orchestrationApi?.api_name}}">
+                    {{orchestrationApi?.api_name}}</td>
+                <td class="url" title="{{orchestrationApi?.api_url}}">{{orchestrationApi?.api_url| truncate:[10,
+                    '...']}} </td>
+                <td class="des truncate" style="max-width: 10ch;"    title="{{orchestrationApi?.description}}">{{orchestrationApi?.description}}</td>
+                <td class="cend" title="{{orchestrationApi?.api_endpoint}}">{{orchestrationApi?.api_endpoint|
+                    truncate:[10, '...']}}</td>
+                <td class="source">{{orchestrationApi?.source_path}} </td>
+                <td class="dest"> {{orchestrationApi?.destination_path}}</td>
+                <td class="input"><button type="button" class="skn-outline-btn" data-bs-toggle="modal"
+                        data-bs-target="#ipModal" (click)="inputParamView(orchestrationApi)">
+                        {{orchestrationApi?.input_params?.length}}
+                    </button>
+                </td>
+                <td  class="output"><button type="button" class="skn-outline-btn" data-bs-toggle="modal"
+                        data-bs-target="#opModal" (click)="outputParamView(orchestrationApi)">
+                        {{orchestrationApi?.output_params?.length}} </button>
+                </td>
+                <td  style="cursor: pointer;" class="action">
+                    <a href="#editAPI" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon me-3"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit"
+                            (click)="captureApiNameToBeEdited(orchestrationApi)">
+                    </a>
+                    <a href="#deleteAPI" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-title="Delete"
+                            (click)="captureApiNameToBeDeleted(orchestrationApi)">
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- ============================================================================================================================================= -->
+
+
+<!-- Input Parameters Modal -->
+<div class="modal fade" id="ipModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">{{inputLength?.name}} Input Parameters </h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body modal-body-text" style="word-wrap: break-word;">
+                {{inputLength?.input_params | prettyjson}}
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+<!-- Output Parameters Modal -->
+<div class="modal fade" id="opModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title"> {{outputLength?.name}} Output Parameters</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body modal-body-text" style="word-wrap: break-word;">
+                {{outputLength?.output_params | prettyjson}}
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+<!-- Edit API -->
+<div class="modal fade" id="editAPI" tabindex="-1" aria-hidden="true">
+    <!-- <div class="modal-dialog modal-lg modal-dialog-centered"> -->
+    <app-edit-orchestration-api [api]="apiToBeEdited"
+        (apiUpdatedEvent)="fetchOrchestrationApis($event)"></app-edit-orchestration-api>
+
+
+    <!-- </div> -->
+</div>
+<!--=======================================================================================================-->
+<!-- Delete API -->
+<div class="modal fade" id="deleteAPI" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete API {{this.apiToBeDeleted?.api_name}}?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="deleteOrchestrationApi()">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->

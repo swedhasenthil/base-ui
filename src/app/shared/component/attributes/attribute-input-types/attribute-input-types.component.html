@@ -1,0 +1,277 @@
+<div
+  class="skn-fieldset attributes d-flex {{ categoryClass }} "
+  (click)="highlightRow(attributeIndex)"
+  (click)="
+    animate(
+      attributeIndex,
+      attributeDetails.category_details[0].page_no,
+      attributeDetails.category
+    )
+  "
+  *ngIf="attributeDetails && attributeDetails.type != 'table'"
+>
+  <ng-container class="row extract-data-item">
+    <!-- Attribute Label Start -->
+    <label
+      for=""
+      class="skn-field-label"
+      [ngClass]="{ canvasHighlight: attributeIndex == activeAttributeIndex }"
+      >{{ attributeDetails.category }}
+    </label>
+    <!-- Attribute Label End -->
+
+    <!-- Add ChatGPT image for categories containing ChatGPT text -->
+    <span style="width: 40px">
+      <img
+        *ngIf="
+        attributeDetails.category.indexOf('ChatGPT') >=0 ; else notChatGPT
+        "
+        src="../assets/images/chatGPT.png"
+        class="skn-field-label-button"
+        (click)="getChatGPTResponse()"
+      />
+    </span>
+
+    <!-- Add Edited by image if value edited by analyst or qc start here -->
+    <ng-template #notChatGPT>
+      <span style="width: 40px">
+        <img
+          *ngIf="
+            document.updatedAttributes[attributeIndex]?.editedByAnalyst == true
+          "
+          src="../assets/images/icon-analyst-edited-val.svg"
+          class="skn-field-label-icon"
+        />
+      </span>
+    </ng-template>
+
+    <!-- Add Edited by image if value edited by analyst or qc end here -->
+
+    <!-- this.document.updatedAttributes[this.activeAttributeIndex]['category_details'][0].value 
+            Current available input types
+            1. Date
+            2. Amount
+            3. Radio Buttonhighlight
+            4. Dropdown
+            5. Textarea
+
+         -->
+
+    <div class="w-100">
+      <!-- Input Date Start here -->
+      <div class="val" *ngIf="isInputDate">
+        <input
+          [ngClass]="{ inputHighlight: attributeIndex == activeAttributeIndex }"
+          type="text"
+          class="skn-attr {{ docAttributeValueClass }} {{ hasError }} {{
+            lowConfidence
+          }} {{ highConfidence }} "
+          [ngModel]="attributeCategoryDetails.value"
+          (ngModelChange)="
+            updateAttributeValue(
+              attributeIndex,
+              attributeDetails,
+              $event,
+              'date'
+            )
+          "
+          [bsConfig]="{
+            adaptivePosition: true,
+            containerClass: 'theme-dark-blue',
+            dateInputFormat: 'DD-MMM-YYYY'
+          }"
+          bsDatepicker
+        />
+        <!-- <input type="text"  placeholder="Daterangepicker" class="skn-input" bsDatepicker 
+           > -->
+      </div>
+      <!-- Input Date End here -->
+
+      <!-- Input Amount Start here -->
+      <div class="val" *ngIf="isInputAmount">
+        <textarea
+          rows="1"
+          autosizeinputHighlight
+          style="resize: none"
+          (change)="
+            updateAttributeValue(
+              attributeIndex,
+              attributeDetails,
+              $event,
+              'Amount'
+            )
+          "
+          [ngClass]="{ inputHighlight: attributeIndex == activeAttributeIndex }"
+          class="{{ docAttributeValueClass }} {{ hasError }} {{
+            lowConfidence
+          }} {{ highConfidence }} skn-attr sided-panel-values mt-1"
+          id="{{ 'sided-panel-values-' + attributeIndex }}"
+          placeholder="XX.XX"
+          value="{{ attributeCategoryDetails?.value }}"
+          appTwoDigitDecimaNumber
+        >
+        </textarea>
+      </div>
+      <!-- Input Amount End here -->
+
+      <!-- Input Radio start here -->
+      <div class="row" *ngIf="isInputRadioLists">
+        <div class="col" style="font-size: 11px">
+          <div
+            class="w-100 d-flex gap-3 p-2 
+            {{ docAttributeValueClass }} 
+            {{ hasError }} 
+            {{ lowConfidence }} 
+            {{ highConfidence }}"
+          >
+            <div
+              class="form-check"
+              *ngFor="
+                let status of attributeCategoryDetails.radioLists;
+                let optionIndex = index
+              "
+            >
+              <input
+                class="form-check-input skn-radio"
+                type="radio"
+                (change)="
+                  updateAttributeValue(
+                    attributeIndex,
+                    attributeDetails,
+                    $event,
+                    'Radio'
+                  )
+                "
+                [(ngModel)]="attributeCategoryDetails.value"
+                name="{{ attributeIndex }}"
+                id="{{ attributeIndex + '' + optionIndex }}"
+                value="{{ status?.key }}"
+                [ngClass]="{
+                  inputHighlight: attributeIndex == activeAttributeIndex
+                }"
+              />
+              <label
+                class="skn-radio-label"
+                for="{{ attributeIndex + '' + optionIndex }}"
+                >&nbsp;
+                {{ " " + status.value }}
+              </label>
+            </div>
+
+            <p class="error-cnf-text"></p>
+          </div>
+        </div>
+      </div>
+      <!-- Input Radio End here -->
+
+      <!-- Input textarea start here -->
+      <div class="val" *ngIf="isInputTextarea">
+        <textarea
+          *ngIf="
+            !attributeDetails.editedByAnalyst || editableIndex != attributeIndex
+          "
+          rows="1"
+          autosize
+          style="resize: none"
+          (keypress)="
+            attributeCategoryDetails.isNumber && onlyNumberKey($event)
+          "
+          (change)="
+            updateAttributeValue(
+              attributeIndex,
+              attributeDetails,
+              $event,
+              'Textarea'
+            )
+          "
+          [ngClass]="{ inputHighlight: attributeIndex == activeAttributeIndex }"
+          [(ngModel)]="attributeCategoryDetails.value"
+          (ngModelChange)="editTextAttributeChange()"
+          class="{{ docAttributeValueClass }} {{ hasError }} {{
+            lowConfidence
+          }} {{ highConfidence }} skn-attr sided-panel-values mt-1"
+          id="{{ 'sided-panel-values-' + attributeIndex }}"
+        >
+        </textarea>
+        <p
+          style="display: none"
+          [ngClass]="{ 'error-cnf-text': attributeDetails.has_error == true }"
+        >
+          Only numeric values allowed
+        </p>
+      </div>
+      <!-- Input text End here -->
+
+      <!-- <div
+        
+        *ngIf="
+          attributeDetails.editedByAnalyst &&
+          editableIndex != attributeIndex &&
+          isInputTextarea
+        "
+        class="val mt-2" style="display: flex !important;"
+      >
+
+        <select style="height: 48px;overflow: auto;" [ngClass]="{ inputHighlight: attributeIndex == activeAttributeIndex }"
+          [(ngModel)]="attributeCategoryDetails.value"
+          class="{{
+            docAttributeValueClass
+          }} skn-attr skn-attr-high-cnf  mt-2 skn-select" 
+          (change)="
+            updateAttributeValue(
+              attributeIndex,
+              attributeDetails,
+              $event,
+              'Dropdown'
+            )
+          "
+        >
+          <!-- <option [value]="attributeCategoryDetails?.value" title="{{attributeCategoryDetails.value}}">
+            {{ attributeCategoryDetails.value | truncate:[25, '...']}}
+          </option> -->
+      <!-- <option [value]="originDocumentAttributes[attributeIndex]?.category_details[0]?.value"  title="{{originDocumentAttributes[attributeIndex]?.category_details[0]?.value}}">
+            {{originDocumentAttributes[attributeIndex]?.category_details[0]?.value | truncate:[25, '...']}}
+          </option> -->
+      <!-- </select> -->
+      <!-- <a style="margin-top:1pc;" data-bs-toggle="modal" data-toggle="tooltip" title="Edit" (click)="editThisValue(attributeIndex)"><img src="../assets/images/icon-edit.svg" class="skn-action-icon me-3"/></a> -->
+
+      <!-- <input type="text" class="form-control boxPopup" disabled value="{{ originDocumentAttributes[attributeIndex].category_details[0].value }}"> -->
+      <!-- </div> -->
+      <!-- Input Dropdown Starts here -->
+      <div *ngIf="isInputDropdownlists">
+        <!-- <ng-select [items]="simpleItems" [(ngModel)]="selectedSimpleItem">
+        </ng-select> -->
+        <ng-select
+          [clearable]="false"
+          [virtualScroll]="true"
+          (change)="
+            updateAttributeValue(
+              attributeIndex,
+              attributeDetails,
+              $event,
+              'updatedDropdown'
+            )
+          "
+          [ngClass]="{ inputHighlight: attributeIndex == activeAttributeIndex }"
+          class="custom-ng-select {{ docAttributeValueClass }} {{ hasError }} {{
+            lowConfidence
+          }} {{ highConfidence }} skn-attr form-control form-control-xs mt-2"
+          [(ngModel)]="attributeCategoryDetails.value"
+        >
+          <ng-option
+            *ngFor="let list of attributeCategoryDetails.dropdownlists"
+            [value]="list.key"
+          >
+            <span *ngIf="attributeDetails.category != 'Currency'">
+              {{ list.key }} - {{ list.value }}</span
+            >
+            <span *ngIf="attributeDetails.category == 'Currency'">
+              {{ list.value }}</span
+            >
+          </ng-option>
+        </ng-select>
+      </div>
+      <!-- Input Dropdown Starts here -->
+    </div>
+  </ng-container>
+</div>

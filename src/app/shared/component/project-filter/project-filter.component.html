@@ -1,0 +1,21 @@
+<div>
+  <div class="dropdown skn-top-filterbar-item-select">
+    <div class="skn-top-filterbar-item-label">Filter by project:</div>
+    <button
+      class="btn dropdown-toggle"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      {{ selectedProjectName }} <i class="bi bi-chevron-down ms-2"></i>
+    </button>
+    <ul class="dropdown-menu">
+      <li
+        *ngFor="let projects of allProjects; let i = index"
+        (click)="onProjectChange(projects)"
+      >
+        <a class="dropdown-item">{{ projects.projectName }}</a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+
+    <div class="container-fluid mt-3 text-white page-bg-color" id="page-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="card rounded border-0 shadow-sm new-window preview-wrapper"
+                    style="overflow-y: hidden; overflow-y: scroll">
+                    <div class="card-body m-auto">
+                        <div class="sticky-image-menu">
+                            <div class="skn-review-controlls" >
+            
+                                <button class="skn-preview-image-options" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Rotate Clock wise" (click)="rotate()"><img src="../assets/images/icon-reload.svg"></button>
+                                <button class="skn-preview-image-options" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Fit to width" (click)="fitToScreen()"><img src="../assets/images/icon-arrow-left-right.svg"></button>
+                                <button class="skn-preview-image-options" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zoom in" (click)="zoomIn(activeImg + 1)"><img src="../assets/images/zoom-in.svg"></button>
+                                <button class="skn-preview-image-options" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Zoom out" (click)="zoomOut()"><img src="../assets/images/zoom-out.svg"></button>
+                            </div>
+                        </div>
+                        <canvas class="w-100"  *ngFor="let image of ImageArray; let i = index" id="layer{{ i }}">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

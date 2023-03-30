@@ -1,0 +1,127 @@
+<div class="container">
+    <form [formGroup]="formEditUser" (ngSubmit)="uodate()">
+        <div class="row justify-content-center mt-2">
+            <div class="card w-100 p-5">
+
+                <div class="row mt-2">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">First Name</label>
+                                <input type="text" class="form-control"  formControlName="firstName"
+                                    [ngClass]="{'is-invalid':submited && f.firstName.errors}">
+                                <div *ngIf="f.firstName.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.firstName.errors?.required">First Name is
+                                        Required</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="">Last Name</label>
+                                <input type="text" class="form-control" formControlName="lastName"
+                                    [ngClass]="{'is-invalid':submited && f.lastName.errors}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="" class="">Gender</label>
+                                <div class="d-flex px-0">
+                                    <input type="radio" class="m-2" name="gender" value="1"
+                                        formControlName="gender">Male
+                                    <input type="radio" class="m-2" name="gender" value="0"
+                                        formControlName="gender">Female
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Date of Birth</label>
+                                <div class="w-100">
+                                    <p-calendar class="w-100" [maxDate]="dateTime" placeholder="dd/mm/yyyy" name="dob"
+                                      ngDefaultControl  [(ngModel)]="dob" formControlName="dob" [style]="{'width':'100%'}"
+                                        [showIcon]="true" [ngClass]="{'is-invalid':submited && f.dob.errors}">
+                                    </p-calendar>
+                                </div>
+                                <div *ngIf="f.dob.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.dob.errors?.required">Date of Birth is
+                                        Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">Email</label>
+                                <input type="text" class="form-control" formControlName="email" placeholder="mm-dd-yy"
+                                    [ngClass]="{'is-invalid':submited && f.email.errors}">
+                                <div *ngIf="f.email.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.email.errors?.required">Email is Required
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="f.email.errors?.pattern">Enter Valid Email
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Mobile</label>
+                                <input type="text" class="form-control" formControlName="mobile"
+                                    [ngClass]="{'is-invalid':submited && f.mobile.errors}">
+                                <div *ngIf="f.mobile.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.mobile.errors?.required">Mobile is Required
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="f.mobile.errors?.pattern">Enter Only Numbers
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="f.mobile.errors?.maxlength">Enter Valid
+                                        Mobile Number</div>
+                                    <div class="alert alert-danger" *ngIf="f.mobile.errors?.minlength">Enter Valid
+                                        Mobile Number</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="">User Name</label>
+                                <input type="text" class="form-control" formControlName="userName"
+                                    [ngClass]="{'is-invalid':submited && f.userName.errors}">
+                                <div *ngIf="f.userName.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.userName.errors?.required">User Name is
+                                        Required</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Password</label>
+                                <input type="password" class="form-control" formControlName="password"
+                                 [ngClass]="{'is-invalid':submited && f.password.errors}">
+                                <div *ngIf="f.password.errors && submited">
+                                    <div class="alert alert-danger" *ngIf="f.password.errors?.required">Password is
+                                        Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="getUserType!='User'">
+                            <div class="col-md-6">
+                                <label>Select Role</label>
+                                 <select class="form-control" formControlName="roles">
+                                      <option value="SAdmin">Super Admin</option>
+                                      <option value="Admin">Admin</option>
+                                      <option value="User">User</option>
+                                 </select>
+                            </div>
+                        </div>
+                        <div class="row pt-5">
+                            <div class="col-md-12">
+                                <button class=" btn btn-primary w-100">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <img id="profileImage" [src]="imagePath">
+                        <div class="d-flex justify-content-center mt-4">
+                            <input type="file" #upload (change)="fileUpload($event)" hidden>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="upload.click()">Upload</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,11 @@
+
+.nave-menu{
+ background-color: #2190ff;
+}
+li a{
+    color: white !important;
+}
+
+.dropdown-menu >.dropdown-item {
+    color: rgb(11, 11, 11) !important;
+}

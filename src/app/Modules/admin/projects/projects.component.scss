@@ -1,0 +1,117 @@
+// .skn-table_project tbody td {
+//     font-size: var(--fs13) !important;
+//     font-weight: var(--fw400) !important;
+//     color: var(--base) !important;
+//     padding: 18px !important;
+// /*     white-space: nowrap !important; */
+// }
+
+.skn-table_project .skn-input,
+.skn-table_project .skn-select,
+.skn-sub-table .skn-input,
+.skn-sub-table .skn-select,
+.skn-modal-table .skn-input,
+.skn-modal-table .skn-select {
+    padding: 5px !important;
+}
+.skn-input{
+    border: 1px solid var(--field-border) !important;
+    outline: none !important;
+    padding: 15px !important;
+    font-size: var(--fs13) !important;
+    font-weight: var(--fw400) !important;
+    color: var(--base) !important;
+    width: -webkit-fill-available !important;
+    border-radius: 0px !important;
+    background: var(--base-contrast) !important;
+}
+
+.skn-table_project thead tr th{
+    font-size: var(--fs13) !important;
+    font-weight: var(--fw700) !important;
+    color: var(--base) !important;
+    border-color: var(--base10) !important;
+    border-top-width: 1px !important;
+    padding-left: 18px !important;
+    padding-right: 16px !important;
+    // white-space: nowrap !important;
+}
+
+.skn-table_project tbody td{
+    font-size: var(--fs13) !important;
+    font-weight: var(--fw400) !important;
+    color: var(--base) !important;
+    padding: 18px !important;
+    // white-space: nowrap !important;
+}
+
+
+.modal-body-resoure{ 
+    position: relative;
+    flex: 1 1 auto;
+    padding: var(--bs-modal-padding);
+    /* max-height: calc(100vh - 200px); */
+    overflow: auto;
+}
+.sorting .sorting_asc{
+    display:none !important;
+}
+
+.dataTables_scrollBody {
+    margin-top: -16px;
+    max-height:42vh  !important;
+}
+@media screen and (min-width: 1440px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:75vh !important
+    }
+}
+@media screen and (min-width: 1366px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:46vh !important
+    }
+}
+@media screen and (min-width: 1620px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}
+@media screen and (min-width: 1920px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}
+    .name{
+        width:10% !important
+    }
+    .last_updated{
+        width:10% !important
+    }
+    .source{
+        width:10% !important
+    }
+    .destination{
+        width:12% !important
+    }
+    .user_group{
+        width:10% !important  
+    }
+    .document{
+        width:10% !important   
+    }
+    .assign_task{
+        width:10% !important   
+    }
+    .display_time{
+        width:10% !important    
+    }
+    .status{
+        width:7% !important    
+    }
+    .action{
+        width:10% !important    
+    }

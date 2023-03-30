@@ -1,0 +1,24 @@
+<div class="skn-review-thumbnails-container">
+  <div class="d-flex align-items-center mb-3">
+    <img
+      src="../assets/images/icon-thumbnails.svg"
+      class="skn-thumbnail-icon me-2"
+      (click)="thumbShowHide()"
+    />
+    <div *ngIf="!isShowHide" class="skn-review-thumbnails-title" id="skn-review-thumbnails-title">
+      Page {{ imageBlobUrl.length ? currentImageIndex + 1 : 0 }} of {{ imageBlobUrl.length }}
+    </div>
+  </div>
+  <div *ngIf="!isShowHide" class="skn-review-thumbnails" id="skn-review-thumbnails">
+    <div
+      class="skn-thumbnail"
+      *ngFor="let img of imageBlobUrl; let i = index"
+      [class.skn-thumbnail-active]="currentImageIndex === i"
+      (click)="setindex(i)"
+      id="thumb-image-{{ i }}"
+    >
+      <img [src]="img" class="skn-thumbnail-img" />
+      <div class="skn-thumbnail-number">{{ i + 1 }}</div>
+    </div>
+  </div>
+</div>

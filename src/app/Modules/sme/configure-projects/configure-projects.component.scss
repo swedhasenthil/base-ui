@@ -1,0 +1,25 @@
+// tr {
+//     display:list-item !important;
+// }
+.w-50px{
+    width: 50px !important;
+}
+
+.attribute-box{
+    position: relative;
+    top:5px;
+}
+
+.skn-input-attribute{
+    border: 1px solid var(--field-border) !important;
+    outline: none !important;
+    padding: 5px !important;
+    font-size: var(--fs13) !important;
+    font-weight: var(--fw400) !important;
+    color: var(--base) !important;
+    // width: -webkit-fill-available !important;
+    border-radius: 0px !important;
+    background: var(--base-contrast) !important;
+}
+
+ 

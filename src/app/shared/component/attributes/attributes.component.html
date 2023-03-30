@@ -1,0 +1,83 @@
+<!-- <p>attributes works!</p> -->
+<div class="skn-review-tabs-cnt" >
+  <div class="skn-review-tabs">
+    <div class="nav nav-tabs" role="tablist" id="btnContainer">
+      <button
+        class="nav-link active"
+        (click)="filterCategory('all')"
+        type="button"
+        [ngClass]="{ active: activeTab === 'all' }"
+        role="tab"
+        aria-selected="true"
+      >
+        All
+      </button>
+      <button
+        class="nav-link"
+        [ngClass]="{ active: activeTab === 'input-mandatory' }"
+        (click)="filterCategory('input-mandatory')"
+        type="button"
+        role="tab"
+        aria-selected="false"
+      >
+        Mandatory<span class="badge rounded-circle ms-2 skn-tab-badge-primary"
+          >{{mandatoryCount}}</span
+        >
+      </button>
+      <button
+        class="nav-link"
+        [ngClass]="{ active: activeTab === 'input-high-confidence' }"
+        (click)="filterCategory('input-high-confidence')"
+        type="button"
+        role="tab"
+        aria-selected="false"
+      >
+        High Confidence
+        <div class="ms-2 skn-tab-badge-success"></div>
+      </button>
+      <button
+        class="nav-link"
+        [ngClass]="{ active: activeTab === 'input-low-confidence' }"
+        (click)="filterCategory('input-low-confidence')"
+        type="button"
+        role="tab"
+        aria-selected="false"
+      >
+        Low Confidence
+        <div class="ms-2 skn-tab-badge-danger bg-warning"></div>
+      </button>
+      <button
+        class="nav-link"
+        [ngClass]="{ active: activeTab === 'input-has-error' }"
+        (click)="filterCategory('input-has-error')"
+        type="button"
+        role="tab"
+        aria-selected="false"
+      >
+        Error
+        <div class="ms-2 skn-tab-badge-error bg-danger"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content skn-tab-content" >
+  <div class="tab-pane fade show active">
+    <div class="skn-fields-cnt">
+      <div class="skn-review-fields-note">Fields marked with <img src="../assets/images/icon-analyst-edited-val-grey.svg" class="mx-2"/> have been changed</div>
+  <ng-container
+    *ngFor="
+      let attribute of documentAttributes;  let i = index;
+    "
+  >
+    <app-attribute-input-types
+      [attributeDetails]="attribute"
+      [attributeIndex]="i" (click)="saveLastClickedElement()"
+    ></app-attribute-input-types>
+  </ng-container>
+</div>
+</div>
+</div>
+<div  >
+  <app-review-document-buttons></app-review-document-buttons>
+</div>

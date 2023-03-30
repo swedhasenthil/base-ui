@@ -1,0 +1,170 @@
+<tr style="border-bottom-width: 1px !important;    border-color: var(--bs-table-border-color)!important"
+  *ngFor="let field of masterJsonArr[masterIndex].attributesArr; let i = index   ;let lastIndex = last">
+  <td>
+    <select class="skn-select" *ngIf="field.status=='Pending'"
+      (change)="docType(field.documentName,i,masterIndex,masterJsonArr[masterIndex])" [(ngModel)]="field.documentName"
+      name="{{field.documentName}}">
+      <option value="">Select</option>
+      <option *ngFor="let item of uniqueDocTypeSelection;let x= index;" [value]="item">
+        {{ item}}
+      </option>
+    </select>
+
+    <select *ngIf="field.status==='Done' &&  !field?.edit" disabled [(ngModel)]="field.documentName"
+      name="{{field.documentName}}" class="skn-select">
+      <option value="Select Doctype">Select DocType</option>
+      <option *ngFor="let item of types;let x= index;" [value]="item">
+        {{item}}
+      </option>
+    </select>
+
+    <select *ngIf="field.status=='Done' &&  field.edit" [(ngModel)]="field.documentName"
+      (change)="docType(field.documentName,i,masterIndex,field)" name="{{field.documentName}}" class="skn-select">
+      <option value="Select Doctype">Select DocType</option>
+      <option *ngFor="let item of uniqueDocTypeSelectionOnEdit ;let x= index;" [value]="item">{{item}}
+      </option>
+    </select>
+  </td>
+  <td>
+    <input [(ngModel)]="field.description" *ngIf="field.status=='Pending'" type="text"
+      (change)=docTypeDescChange(field.description,masterIndex) name="{{field.description}}" class="skn-input">
+    <input [(ngModel)]="field.description" *ngIf="field.status=='Done' &&  !field.edit" type="text"
+      (change)=docTypeDescChange(field.description,masterIndex) disabled name="{{field.description}}" class="skn-input">
+    <input [(ngModel)]="field.description" *ngIf="field.status=='Done' &&  field.edit" type="text"
+      (change)=docTypeDescChange(field.description,masterIndex) name="{{field.description}}" class="skn-input">
+
+
+  </td>
+  <td>
+    <div *ngIf="field?.edit" >
+        <img src="../assets/images/icon-input-valid.png"
+            class="btn btn-sm  spacebtw " alt="Save" title="Save" (click)="field.edit = false; updateDocument(field)">
+        <img src="../assets/images/icon-input-invalid.png"
+            alt="Re-edit" title="Cancel" class="btn btn-sm" (click)="field.edit = false;">
+
+    </div>
+  </td>
+
+  <td>
+    <a class="skn-badge-highlight attribute-box" href="#" role="button" [(ngModel)]="field.attrLength"
+      *ngIf="!field?.edit " type="text" name="{{field.attrLength}}"
+      (click)="attibutesSelection(projectDocumentList[i],field,i)" data-bs-toggle="modal"
+      data-bs-target="#manageAttributesModal" ngDefaultControl>{{field.attrLength}}</a>
+
+      <a class="skn-badge-highlight attribute-box" href="#" role="button"  [(ngModel)]="projectDocumentList[i].attributesLength"
+      *ngIf="field.edit && projectDocumentList[i].documentName == field.documentName" type="text" name="{{field.attrLength}}"
+      (click)=" attibutesSelection(projectDocumentList[i],field,i)" data-bs-toggle="modal"
+      data-bs-target="#manageAttributesModal" ngDefaultControl>{{projectDocumentList[i].attributesLength}}</a>
+
+    <a class="skn-badge-highlight attribute-box" href="#" role="button" [(ngModel)]="field.attrLength"
+      *ngIf="field.edit &&  projectDocumentList[i].documentName != field.documentName" type="text" name="{{field.attrLength}}" (click)="docType(field.documentName,i,masterIndex,masterJsonArr[masterIndex])" data-bs-toggle="modal"
+      data-bs-target="#manageAttributesModal" ngDefaultControl>{{field.attrLength}}</a>
+  </td>
+  <td>
+    <span class="badge skn-status-badge-completed-filled" *ngIf="field.status==''">{{editstatus}}</span>
+    <span class="badge skn-status-badge-completed-filled" *ngIf="!field.edit">Done</span>
+    <span class="badge skn-status-badge-pending-filled" *ngIf="field.edit">{{editstatus}} </span>
+  </td>
+
+  <td style="cursor: pointer;">
+    <a data-bs-toggle="tooltip" title="edit" (click)="editRow(masterIndex,i,field)"><img src="../assets/images/icon-edit.svg"
+        class="skn-config-edit-icon skn-action-icon me-3" /></a>
+    <a (click)="deleteDoumentType(masterIndex,index,field.documentName,field)" data-bs-toggle="modal"
+      data-bs-target="#delete"><img src="../assets/images/icon-trash.svg"
+        class="skn-config-edit-icon skn-action-icon me-3" /></a>
+    <a (click)="addRow(masterIndex,field,'fromFieldArray')" *ngIf="field.add"><img src="../assets/images/zoom-in.svg"
+        class="skn-config-edit-icon skn-action-icon" /></a>
+
+  </td>
+</tr>
+<tr *ngIf="!isData && !isDeleteFromNew" style="border-bottom-width: 1px !important;    border-color: var(--bs-table-border-color)!important">
+  <td>
+    <select
+      (change)="docType(masterJsonArr[masterIndex].newAttribute.documentName,'-1',masterIndex,masterJsonArr[masterIndex].newAttribute)"
+      [(ngModel)]="masterJsonArr[masterIndex].newAttribute.documentName"
+      id="masterJsonArr[masterIndex].newAttribute.documentName"
+      name="masterJsonArr[masterIndex].newAttribute.documentName" class="skn-select">
+      <option *ngFor="let item of uniqueDocTypeSelection;let i= index;" [attr.value]="item"
+        [attr.selected]="i == 0 ? true : null">
+        {{item}}
+      </option>
+    </select>
+  </td>
+  <td>
+    <input type="text" id="newAttributeName"
+      (change)=docTypeDescChange(masterJsonArr[masterIndex].newAttribute.description,masterIndex)
+      [(ngModel)]="masterJsonArr[masterIndex].newAttribute.description" name="newAttributeName" class="skn-input">
+  </td>
+  <td>
+  </td>
+  <td>
+    <a class="skn-badge-highlight attribute-box" href="#" role="button"
+      [(ngModel)]="masterJsonArr[masterIndex].newAttribute.attrLength" data-bs-toggle="modal"
+      data-bs-target="#manageAttributesModal" name="masterJsonArr[masterIndex].newAttribute.attrLength"
+      (click)="openDualListModal(masterJsonArr[masterIndex].newAttribute,'fromadd',masterIndex,masterJsonArr[masterIndex])"
+      ngDefaultControl>{{masterJsonArr[masterIndex].newAttribute.attrLength}}</a>
+  </td>
+  <td>
+
+
+    <span class="badge skn-status-badge-completed-filled"
+      *ngIf="masterJsonArr[masterIndex].newAttribute.status == 'Done'">{{
+      masterJsonArr[masterIndex].newAttribute.status }}</span>
+
+    <span class="badge skn-status-badge-pending-filled"
+      *ngIf="masterJsonArr[masterIndex].newAttribute.status == 'Pending'">{{
+      masterJsonArr[masterIndex].newAttribute.status }}</span>
+
+  </td>
+  <td>
+    <a href="javascript:void(0)" class="text-danger" (click)="deleteFromNewAttribute(masterIndex)"
+      matTooltip="Delete Row"><img src="../assets/images/icon-trash.svg"
+        class="skn-config-edit-icon skn-action-icon me-3" />
+    </a>
+  </td>
+</tr>
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content text-dark">
+      <p class="p-3">Are you sure you want to delete
+        <small> <strong> {{docNameFromDelete}} </strong>?</small>
+      </p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"
+          (click)="deleteFieldValue(masterIndexDelete,indexDelete,docNameFromDelete)">Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- delete document type -->
+
+
+<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteReferenceDataModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="skn-modal-title">Are you sure you want to delete {{docNameFromDelete}}?</h3>
+        <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+          aria-label="Close">
+      </div>
+      <!--===============================================================================================-->
+      <div class="modal-body">
+      </div>
+      <!--===============================================================================================-->
+      <div class="modal-footer border-0">
+        <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+        <button type="button" class="skn-filled-btn"
+          (click)="deleteFieldValue(masterIndexDelete,indexDelete,docNameFromDelete)" data-bs-dismiss="modal">CONFIRM
+          DELETE</button>
+      </div>
+      <!--================================================================================================-->
+    </div>
+  </div>
+
+</div>
+
+<app-manage-attributes ></app-manage-attributes>
+<app-define-rules></app-define-rules>

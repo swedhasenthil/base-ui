@@ -1,0 +1,24 @@
+.skn-notification-text{
+    white-space: pre-line;
+    width:250px
+}
+.notification-height{height: 297px!important;overflow:auto}
+
+#ul{
+    transform: translate(-70px, 38px) !important;
+}
+
+.emtyNotification{
+    transform: translate(-70px, 38px) !important;
+}
+.notification{
+    transform: translate(-117px, 38px) !important;
+}
+ .badge[_ngcontent-oxt-c146] {
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+}

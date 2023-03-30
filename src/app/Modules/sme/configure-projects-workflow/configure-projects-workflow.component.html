@@ -1,0 +1,96 @@
+<div>
+
+    <div class="tab-content skn-tab-content">
+
+        <div class="tab-pane fade show active" id="all" role="tabpanel" tabindex="0">
+
+
+            <div class="skn-table-cnt">
+                 <!-- <app-work-flow ></app-work-flow> -->
+            </div>
+            <!-- ==================================================================== table-ends-here ======================================================== -->
+        </div>
+        <!--===========================================================================================-->
+
+        <div class="tab-pane fade" id="mandatory" role="tabpanel" tabindex="0">
+
+                    <!-- <app-rules></app-rules> -->
+
+            <!-- ==================================================================== table-ends-here ======================================================== -->
+
+        </div>
+        <!--===========================================================================================-->
+
+    </div>
+    <!-- ============================================================== tabs-ends-here ================================================================== -->
+
+
+
+        <!-- Update New Workflow Modal  -->
+        <div class="modal fade" id="addWorkFlowModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="skn-modal-title">Add New Workflow</h3>
+                        <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                    </div>
+                    <!--===============================================================================================-->
+                    <div class="modal-body">
+
+                        <table class="w-100">
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Document Name*</label>
+                                </td>
+                                <td class="py-3">
+                                    <select class="skn-select" [(ngModel)]="addWorkflow.documentType">
+                                        <option value="Option 1">Select</option>
+                                        <option *ngFor="let document of documentTypeList" [value]="document._id">{{document.document_type}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Destination</label>
+                                </td>
+                                <td class="py-3">
+                                    <select class="skn-select"  [(ngModel)]="addWorkflow.destination">
+                                        <option value="Option 1">Select</option>
+                                        <option *ngFor="let document of documentTypeList" [value]="document._id">{{document.document_type}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Boolean Workflow</label>
+                                </td>
+                                <td class="py-3">
+                                    <input type="text" [(ngModel)]="addWorkflow.booleanWorkflow"  class="skn-input">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="py-3">
+                                    <label class="skn-modal-field-label-2">Workflow Name</label>
+                                </td>
+                                <td class="py-3">
+                                    <input type="text" [(ngModel)]="addWorkflow.workflowName" class="skn-input">
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                    <!--===============================================================================================-->
+                    <div class="modal-footer">
+                        <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                        <button type="button" class="skn-filled-btn"  (click)="addNewWorkflow()" data-bs-dismiss="modal">SUBMIT</button>
+                    </div>
+                    <!--===============================================================================================-->
+                </div>
+            </div>
+        </div>
+       

@@ -1,0 +1,117 @@
+  <div class="skn-review-tabs-footer">
+    <div class="skn-check">
+        <input class="form-check-input skn-check-input-color mx-2" *ngIf="document" [(ngModel)]="document.submit_for_review" type="checkbox" value="" id="checkbox">
+        <label class="skn-check-label-color" for="checkbox">
+            Select for Review
+        </label>
+    </div>
+    <div class="btn-group skn-review-split-dropdown">
+        <button type="button" class="skn-outline-btn" *ngIf="saveBtn == true" (click)="onSaveDocumentClick()" >SAVE</button>
+        <button type="button" class="skn-outline-btn" *ngIf="saveBtn != true"  (click)=" getReasonsList()" data-bs-toggle="modal" data-bs-target="#rejectionModal">REJECT</button>
+
+        <button type="button" class="skn-outline-split-btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
+            <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li (click)="saveAndReject('save');onSaveDocumentClick()"><a class="dropdown-item">SAVE</a></li>
+            <li (click)="saveAndReject('reject'); getReasonsList()" data-bs-toggle="modal" data-bs-target="#rejectionModal"><a class="dropdown-item">REJECT</a></li>
+        </ul>
+    </div>
+    <button type="button" class="skn-filled-btn" data-bs-toggle="modal" data-bs-target="#sumbitChangesModal" [disabled]="!submitButton" (click)="submit()">SUBMIT</button>
+</div>
+
+  <!-- ====================================================== Reject Document Modal ====================================================== -->
+  <div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="skn-modal-title">Select reason for rejection of document</h3>
+            <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-body">
+            <div class="form-check mb-2"  *ngFor="let rejectionReason of rejectionReasonsArray; let i = index">
+                <input class="form-check-input skn-radio" type="radio" name="flexRadioDefault" (change)="onRejectReasonSelect(rejectionReason.reason)"  id="{{'flexRadioDefault'+i}}">
+                <label class="skn-radio-label" for="{{'flexRadioDefault'+i}}"  >
+                    {{ rejectionReason.reason }}
+                </label>
+            </div>
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-footer">
+            <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            <button type="button" class="skn-filled-btn" (click)="rejectDocumentModalSubmit()" data-bs-dismiss="modal">SUBMIT</button>
+        </div>
+        <!--================================================================================================-->
+    </div>
+    </div>
+</div>
+
+<!-- save and go back to my work page start -->
+<div class="modal fade" id="savedChangesModal" tabindex="-1" aria-labelledby="savedChangesModalLabel" aria-hidden="true" *ngIf="savedDocument == false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">You seem to have unsaved changes</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" (click)="navigate()" data-bs-dismiss="modal" *ngIf="savedDocument == false">GO BACK</button>
+                <button type="button" class="skn-filled-btn" (click)="onSaveDocumentClick() ; navigate()" data-bs-dismiss="modal"  *ngIf="savedDocument == false">SAVE & GO BACK</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!-- save and go back to my work page end -->
+
+<!-- navigated my work page start -->
+<div class="modal fade" id="savedChangesModal" tabindex="-1" aria-labelledby="savedChangesModal" aria-hidden="true" *ngIf="savedDocument == true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">You will now be navigated to list view</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="navigate()" data-bs-dismiss="modal">OK</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!-- navigated my work page end -->
+
+<div class="modal fade" id="sumbitChangesModal" tabindex="-1" aria-labelledby="sumbitChangesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to submit?   </h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" *ngIf="taskAssignment === 'Manual'" >GO BACK</button>
+                <a href="/analyst/my-work" class="skn-transparent-btn" (click)="submitAndGetTask(false)" data-dismiss="modal" *ngIf="taskAssignment != 'Manual'">Submit and Close</a>
+                <button type="button" class="skn-filled-btn"  (click)="submitAndGetTask(false)" data-bs-dismiss="modal" *ngIf="taskAssignment === 'Manual'" >Confirm Submit </button>
+                <button type="button" class="skn-filled-btn"  (click)="submitAndGetTask(true)" data-bs-dismiss="modal" *ngIf="taskAssignment != 'Manual'">Confirm Submit & Get new Task</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!-- -->

@@ -1,0 +1,83 @@
+
+    <div class="skn-table-cnt workflowTable"  >
+        <table id="myTable" class="skn-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+                <tr>
+                    <th class="no-sort">
+                        <div class="skn-check">
+                            <input class="form-check-input skn-check-input" type="checkbox" (change)="selectOrDeselectAllApis($event)"
+                            [(ngModel)]="isSelectedAllApis">
+                        </div>
+                    </th>
+                    <th>API Name</th>
+                    <th>API URL</th>
+                    <th>Description</th>
+                    <th>End Point</th>
+                    <th>Source Path</th>
+                    <th>Destination Path</th>
+                    <th>Input Parameters</th>
+                    <th>Output Parameters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let orchestrationApi of orchestrationApis; index as i">
+                    <td>
+                        <div class="skn-check">
+                            <input class="form-check-input skn-check-input" type="checkbox" (change)="selectOrDeselectApi(orchestrationApi, $event)"
+                            [(ngModel)]="orchestrationApi.isSelected">
+                        </div>
+                    </td>
+                    <td> {{orchestrationApi?.api_name}}</td>
+                    <td title="{{orchestrationApi?.api_url}}"> {{orchestrationApi?.api_url| truncate:[20, '...']}} </td>
+                    <td> {{orchestrationApi?.description}} </td>
+                    <td title="{{orchestrationApi?.api_endpoint}}"> {{orchestrationApi?.api_endpoint| truncate:[20, '...']}} </td>
+                    <td> {{orchestrationApi?.source_path}} </td>
+                    <td title="{{orchestrationApi?.destination_path}}"> {{orchestrationApi?.destination_path | truncate:[20, '...']}} </td>
+                    <td style="cursor: pointer;"><button type="button" class="skn-outline-btn" data-bs-toggle="modal" data-bs-target="#inputParamModal" (click)="inputParamView(orchestrationApi)">{{orchestrationApi?.input_params?.length}} </button></td>
+                    <td style="cursor: pointer;"><button type="button" class="skn-outline-btn" data-bs-toggle="modal" data-bs-target="#outputParamModal" (click)="outputParamView(orchestrationApi)">{{orchestrationApi?.output_params?.length}} </button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- ================================================================================================================================ -->
+    
+    <!-- Input Parameters Modal -->
+    <div class="modal fade" id="inputParamModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                   <h5 class="modal-title" id="ProjectDashboardModalLabel">{{inputLength?.name}} Input Parameters </h5>
+                   <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body pt-4 " style="word-wrap: break-word;font-size: 13px!important">
+                  {{inputLength?.input_params | prettyjson}}
+                </div>
+                <div class="modal-footer mt-2">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" >CANCEL</button>
+                </div>
+             </div>   
+        </div>
+    </div>
+    <!--=======================================================================================================-->
+    
+    <!-- Output Parameters Modal -->
+    <div class="modal fade" id="outputParamModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                   <h5 class="modal-title" id="ProjectDashboardModalLabel">{{outputLength?.name}} Output Parameters </h5>
+                   <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <div class="modal-body pt-4 " style="word-wrap: break-word;font-size: 13px!important">
+                {{outputLength?.output_params | prettyjson}}
+                </div>
+                <div class="modal-footer mt-2">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" >CANCEL</button>
+                </div>
+             </div>  
+        </div>
+    </div>
+    <!--=======================================================================================================-->
+    
+

@@ -1,0 +1,221 @@
+<div class="skn-header" *ngIf="router.url != '/login' && router.url != '/aadlogin'">
+    <div class="skn-header-logo-bar">
+        <!-- <a routerLink="/analyst/my-work" *ngIf="router.url === '/analyst/reports'"><img src="../../assets/images/header-arrow-left.svg"/></a>
+        <a (click)="reloadCurrentPage()" *ngIf="displayList == 'false'"><img src="../../assets/images/header-arrow-left.svg"/></a>
+
+        <a *ngIf="isSme  && router.url != '/sme/landing' && router.url != '/sme/configure-projects-workflow'" routerLink="/sme/landing"><img src="../../assets/images/header-arrow-left.svg"/></a>
+        <a *ngIf="isAdmin  && router.url != '/admin/landing' && router.url != '/admin/api'" routerLink="/admin/landing"><img src="../../assets/images/header-arrow-left.svg"/></a>
+        <a *ngIf="router.url == '/sme/configure-projects-workflow'" routerLink="/sme/configure-projects"><img src="../../assets/images/header-arrow-left.svg"/></a>
+        <a *ngIf="isManager  && router.url != '/manager/manager-landing'" routerLink="/manager/manager-landing"><img src="../../assets/images/header-arrow-left.svg"/></a> -->
+        <div
+            *ngIf="router.url !='/analyst/my-work' && router.url !='/sme/landing' && router.url !='/qc/my-work' && router.url !='/admin/landing' && router.url !='/manager/manager-landing'">
+            <a *ngIf="router.url != '/analyst/review-document'  && router.url != '/qc/review-document'"
+                (click)='backClicked()' style="cursor: pointer;"><img
+                    src="../../assets/images/header-arrow-left.svg" /></a>
+            <a *ngIf="router.url === '/analyst/review-document' || router.url === '/qc/review-document'"
+                (click)="hideEditBox()" data-bs-toggle="modal" data-bs-target="#savedChangesModal"
+                style="cursor: pointer;"><img src="../../assets/images/header-arrow-left.svg" /></a>
+        </div>
+        <img src="../../assets/images/uap-skense-logo-light.png" class="skn-header-logo" />
+    </div>
+
+
+    <div id="analystManu" class="skn-header-nav"
+        *ngIf="isAnalyst && !displayList &&  router.url != '/analyst/review-document'">
+        <a #mywork routerLink="/analyst/my-work" class="skn-header-nav-navitem-active" (click)="activeClass($event)">My
+            Work</a>
+
+        <a routerLink="/analyst/reports" class="skn-header-nav-navitem" (click)="activeClass($event)">Reports</a>
+    </div>
+
+    <div id="qcManu" class="skn-header-nav" *ngIf="isQc && !displayList &&  router.url != '/qc/review-document'">
+        <a routerLink="/qc/my-work" class="skn-header-nav-navitem-active" (click)="activeClass($event)">My Work</a>
+
+        <a routerLink="/qc/reports" class="skn-header-nav-navitem" (click)="activeClass($event)">Reports</a>
+    </div>
+
+    <div class="skn-header-nav"  *ngIf="router.url != '/sme/landing'  &&  isSme ">
+        <a  #configProjects routerLink='/sme/configure-projects' class="skn-header-nav-navitem-active" *ngIf="isSmeItems"  (click)="activeClass($event)">Configure Projects</a>
+         <a #calibrateDocuments routerLink ='/sme/calibrate-documents' class="skn-header-nav-navitem"  *ngIf="isSmeItems"  (click)="activeClass($event)">Calibrate Documents</a>
+        <a  #referenceData routerLink ="/sme/reference-data-management" class="skn-header-nav-navitem"  *ngIf="isSmeItems"  (click)="activeClass($event)" >Custom Data Management</a>
+        <a  #cognitiveApi routerLink="/sme/cognitive-apis" class="skn-header-nav-navitem" *ngIf="isSmeItems"  (click)="activeClass($event)" [ngClass]="{'skn-header-nav-navitem-active': router.url === '/sme/cognitive-apis' ||router.url === '/sme/cognitive-apis-model' }">Cognitive APIs</a>
+    </div>
+
+
+    <div class="skn-header-nav" *ngIf="router.url != '/admin/landing' && isAdmin">
+        <a *ngIf="isAdimnItems" #manageProject routerLink='/admin/manage-project' class="skn-header-nav-navitem-active"
+            (click)="activeClass($event)">Manage Projects</a>
+        <a *ngIf="isAdimnItems" #manageResources routerLink='/admin/manage-resources' class="skn-header-nav-navitem"
+            (click)="activeClass($event)">Manage Resources</a>
+        <a *ngIf="isAdimnItems" #manageApi routerLink="/admin/manage-api" class="skn-header-nav-navitem" (click)="activeClass($event)">Manage
+            APIs</a>
+    </div>
+
+    <div class="skn-header-nav" *ngIf="router.url != '/manager/manager-landing' && isManager">
+        <a #reports routerLink='/manager/reports' class="skn-header-nav-navitem-active"
+            (click)="activeClass($event)" *ngIf="isManagerItems">Report</a>
+        <a #dashboard routerLink='/manager/dashboard' class="skn-header-nav-navitem"
+            (click)="activeClass($event)" *ngIf="isManagerItems">Dashboard</a>
+        <a #managerTask routerLink='/manager/manager-task' class="skn-header-nav-navitem"
+            (click)="activeClass($event)" *ngIf="isManagerItems">Manager Task</a>
+
+    </div>
+
+    <div class="skn-header-nav" *ngIf="router.url=='/analyst/review-document'">
+        <a class="skn-header-nav-navitem">ID: {{document?._id}}</a>
+        <div class="dropdown skn-header-nav-dropdown">
+            <button class="btn dropdown-toggle skn-header-nav-navitem-active" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">{{selectedDocumentType}} <i class="bi bi-chevron-down ms-2"></i></button>
+            <ul class="dropdown-menu"
+                style="height: 300px; overflow: scroll; transform: translate3d(-114.5185px, 37.7778px, 0px) !important;">
+                <li *ngFor="let type of projectDocumentTypes" (click)="changeDocumentType(type,'analyst')">
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changesDocumentTypeModal">{{ type
+                        }}</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="skn-header-nav" *ngIf="router.url=='/qc/review-document'">
+        <a class="skn-header-nav-navitem">ID: {{document?._id}}</a>
+        <div class="dropdown skn-header-nav-dropdown">
+            <button class="btn dropdown-toggle skn-header-nav-navitem-active" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">{{selectedDocumentType}} <i class="bi bi-chevron-down ms-2"></i></button>
+            <ul class="dropdown-menu"
+                style="height: 300px; overflow: scroll; transform: translate3d(-114.5185px, 37.7778px, 0px) !important;">
+                <li *ngFor="let type of projectDocumentTypes" (click)="changeDocumentType(type,'qc')">
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changesDocumentTypeModal">{{ type
+                        }}</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <!-- <div class="skn-header-timer ms-auto" *ngIf="displayList == 'false' && !isSme && !isManager && isAnalyst">{{reviewTime | date:'mm:ss'}}</div> -->
+    <div class="skn-header-nav">
+        <div class="skn-header-nav">
+            <div *ngIf="router.url=='/qc/review-document' || router.url=='/analyst/review-document'">
+                <!-- <div class="skn-header-timer ms-auto" *ngIf = "timerDisplay_status">43:12</div> -->
+
+                <!-- <app-timer [document]="document"></app-timer> -->
+                <app-timer></app-timer>
+            </div>
+
+            <div class="dropdown skn-notification dropdown-center" *ngIf="notifications">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    (click)="getAllNotifications(true)">
+                    <img *ngIf="unReadMessagesCount == 0 " src="../assets/images/icon-bell.svg" />
+                    <span *ngIf="unReadMessagesCount>0 "><img src="../assets/images/icon-bell-new.svg" /></span>
+                    <!-- <span *ngIf="unReadMessagesCount>0" class="badge rounded-circle ms-2 skn-tab-badge-primary">{{unReadMessagesCount}}</span> -->
+                </button>
+                <ul [ngClass]="notificationLength>0 ? 'notification' : 'emtyNotification' " class="dropdown-menu">
+                    <div [ngClass]="{'notification-height': notificationLength >= 3 }">
+                        <li class="dropdown-item"
+                            *ngFor="let notification of notificationMessages | slice:0:show;let i = index">
+
+                            <div class="skn-notification-text">{{notification.body}} </div>
+                            <div class="skn-notification-time">{{notification.created_at | date: 'dd-MMM HH:mm'}}</div> 
+                        </li>
+                    </div>
+                    <li class="dropdown-item" *ngIf="shows === true && show < notificationLength">
+                        <a class="skn-notification-more" (click)="increaseShow($event)">See All Notifications</a>
+                    </li>
+                    <!-- <li class="dropdown-item" *ngIf="shows === true && show < notificationLength">
+                        <a class="skn-notification-more" (click)="increaseShow($event)">See All Notifications</a> -->
+                    <li class="dropdown-item" *ngIf="shows === false">
+                        <a class="skn-notification-more" (click)="decreaseShow($event)">See less Notifications</a>
+                    </li>
+                    <li class="dropdown-item text-center" *ngIf="notificationLength === 0">
+                        <img src="../assets/images/icon-empty-notification.svg" />
+                        <div class="skn-notification-empty-text mt-2">No Notifications</div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="dropdown skn-header-profile">
+            <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <div class="me-3">
+                    <div class="skn-header-profile-name">{{userName}}</div>
+                    <div class="skn-header-profile-role">{{role}}</div>
+                </div>
+                <img src="../assets/images/profile-icon.svg" />
+            </button>
+            <ul class="dropdown-menu">
+                <li (click)="getAllUserRoles()"><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                        data-bs-target="#switchRolesModal" aria-expanded="false">Switch roles</a></li>
+                <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="switchRolesModal" tabindex="-1" aria-labelledby="switchRolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Switch Roles</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body" class="cursor-pointer">
+                <div class="skn-switch-roles-cnt">
+                    <a (click)="goToScreen(role.role_name)" *ngFor="let role of userRoles;" class="skn-switch-roles-box" data-bs-dismiss="modal">
+                        <img src="../assets/images/icon-{{ role.role_name.split(' ')[0] | lowercase }}.svg" class="skn-icon-36" />
+                        <div class="skn-switch-roles-text mt-2">{{ role.role_name }}</div>
+                    </a>
+                </div>
+                <!--===========================================================================================-->
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer" *ngIf="footer">
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+
+<!-- Change Doc Type Modal -->
+<div class="modal fade" id="changesDocumentTypeModal" tabindex="-1" aria-labelledby="changeDocTypeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">You seem to have changed the document type</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" (click)="cancelChangeDocumentType()"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+                <div class="form-check mb-2">
+                    <input class="form-check-input skn-radio" type="radio" name="changeDocType" id="rdRadio"
+                        [(ngModel)]="manualAndAuto" value="auto">
+                    <label class="skn-radio-label" for="rdRadio">
+                        Reprocess document
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input skn-radio" type="radio" name="changeDocType" id="mvRadio"
+                        [(ngModel)]="manualAndAuto" value="manual">
+                    <label class="skn-radio-label" for="mvRadio">
+                        Manually enter values
+                    </label>
+                </div>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" (click)="cancelChangeDocumentType()">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="documentTypeValueUnchanged()"
+                    data-bs-dismiss="modal">SUBMIT</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>

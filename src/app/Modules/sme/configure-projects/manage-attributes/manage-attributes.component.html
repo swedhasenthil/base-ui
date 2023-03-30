@@ -1,0 +1,103 @@
+<div class="modal fade" id="manageAttributesModal" tabindex="-1" aria-labelledby="manageAttributesModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="skn-modal-title">Manage Attributes</h3>
+        <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+          aria-label="Close" (click)="closeModel()" />
+      </div>
+      <!--===============================================================================================-->
+      <div class="modal-body" style="overflow:hidden !important">
+        <!-- <dual-list [source]="attributes" [(destination)]="target" height="200px"></dual-list> -->
+
+        <div class="d-flex justify-content-center mb-2">
+          <div class="w-30 input-group skn-search-box width-fit-content">
+            <i class="bi bi-search input-group-text"></i>
+            <input type="search" class="form-control" placeholder="Search Attributes" [(ngModel)]="term" />
+          </div>
+        </div>
+
+        <div class="d-flex" style="height: 345px;">
+          <div class="skn-border-right-gray w-50 px-3 skn-modal-sa-cnt">
+            <div class="skn-check mb-2">
+              <input class="form-check-input skn-check-input" type="checkbox" id="checkAll" [checked]="isCheckAll"
+                [(ngModel)]="target.attribute_name" (change)="selectLeftAll($event.target)" />
+              <label class="skn-check-label" for="checkAll">
+                <strong>&nbsp;&nbsp;Available Attributes</strong>
+              </label>
+            </div>
+            <div style="height: 65%; overflow-y: auto">
+              <div class="skn-check mb-2" *ngFor="
+                let attribute of leftAttributeList | filter : term;
+                let i;
+                as: index
+              ">
+                <input class="form-check-input skn-check-input" type="checkbox" id="{{ attribute.attribute_name }}"
+                  #checkbox (change)="onChangeLeft(attribute, $event.target, i)" />
+                <label class="skn-check-label" for="{{ attribute.attribute_name }}">&nbsp;&nbsp;{{
+                  attribute.attribute_name }}
+                </label>
+              </div>
+            </div>
+            <div class="bottom-0 mt-4">
+              <button type="button" class="skn-disabled-outline-btn" *ngIf="isCheckLeft === false" disabled>
+                Add Attributes
+              </button>
+              <button type="button" class="skn-outline-btn" *ngIf="isCheckLeft === true" (click)="addAtributes()">
+                Add Attributes
+              </button>
+            </div>
+          </div>
+
+          <!--==========================================================================-->
+
+          <div class="skn-border-right-gray px-3 skn-modal-sa-cnt w-50">
+            <div class="skn-check mb-2">
+              <input class="form-check-input skn-check-input" type="checkbox" id="isCheckAlls" [checked]="isCheckAlls"
+                (change)="selectRightAll($event.target)" />
+              <label class="skn-check-label" for="isCheckAlls">
+                <strong>&nbsp;&nbsp;Selected Attributes</strong>
+              </label>
+            </div>
+            <div style="height: 65%; overflow-y: auto">
+              <div class="skn-check mb-2" *ngFor="
+                let attribute of rightAttributeList | filter : term;
+                let i;
+                as: index
+              ">
+                <input class="form-check-input skn-check-input" type="checkbox" id="{{ attribute.attribute_name }}"
+                  #checkboxRight (change)="onChangeRight(attribute, $event.target, i)" />
+                <label class="skn-check-label" for="{{ attribute.attribute_name }}">&nbsp;&nbsp;{{
+                  attribute.attribute_name }}
+                </label>
+              </div>
+            </div>
+            <div class="bottom-0 mt-4">
+              <button type="button" class="skn-disabled-outline-btn" *ngIf="disableRight === false" disabled>
+                Remove Attributes
+              </button>
+              <button type="button" class="skn-outline-btn" (click)="removeAttributes()" *ngIf="disableRight === true">
+                Remove Attributes
+              </button>
+            </div>
+          </div>
+          <!--==========================================================================-->
+        </div>
+        <!--===========================================================================================-->
+      </div>
+      <!--===============================================================================================-->
+      <div class="modal-footer">
+        <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+        <!-- <button type="button"  *ngIf="editStatus != 'Done' && selectedIndex != IndexAttributes" class="skn-disabled-btn"   data-bs-dismiss="modal" >DEFINE RULES</button> -->
+
+        <button type="button"  *ngIf="editStatus === true " class="skn-disabled-btn"   data-bs-dismiss="modal" >DEFINE RULES</button>     
+        <button type="button" class="skn-filled-btn" *ngIf="editStatus === false " aria-label="Close" data-bs-toggle="modal"
+          data-bs-target="#rulesId">DEFINE RULES</button>
+          <!-- <button type="button" class="skn-filled-btn" *ngIf="editStatus === 'Pending'" aria-label="Close" data-bs-toggle="modal"
+          data-bs-target="#rulesId">DEFINE RULES</button> -->
+      </div>
+      <!--================================================================================================-->
+    </div>
+  </div>
+</div>

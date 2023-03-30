@@ -1,0 +1,128 @@
+<!-- Add New Doc Type Modal -->
+<div class="modal fade" id="addDocTypeModal" tabindex="-1" aria-labelledby="addDocTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title" *ngIf="updateButton === false">Add New Document Type</h3>
+                <h3 class="skn-modal-title" *ngIf="updateButton === true">Edit Document Type</h3>                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+                <div class="d-flex gap-3 mx-4 mt-3 mb-5">
+                    <div class="w-100">
+                        <label class="skn-modal-field-label-2 mb-2">Document Type Name*</label>
+                        <input type="text" class="skn-input" [(ngModel)]="addDocumentForm.documentName">
+                    </div>
+                    <div class="w-100">
+                        <label class="skn-modal-field-label-2 mb-2">Model API</label>
+                        <select class="skn-select" [(ngModel)]="addDocumentForm.modelApi"
+                            (change)="modelApidropdownChange(addDocumentForm.modelApi)">
+                            <option value=''>Select </option>
+                            <option *ngFor="let modelApi of modelApiData" [value]="modelApi._id">
+                                {{modelApi.name}}_v{{modelApi.version}}</option>
+                        </select>
+                    </div>
+                </div>
+                <!--===========================================================================================-->
+                <div class="skn-modal-table-cnt">
+                    <table class="skn-modal-table">
+                        <thead>
+                            <tr>
+                                <th class="skn-modal-field-label-2">Attributes Name</th>
+                                <th class="skn-modal-field-label-2">Model Attribute</th>
+                                <th class="skn-modal-field-label-2">Data Type</th>
+                                <th class="skn-modal-field-label-2">Field Value</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of addDocumentForm.attributesArray ;let i = index;let lastIndex=last">
+                                <td>
+                                    <input type="text" class="skn-input" [(ngModel)]="item.attribute_name">
+                                </td>
+                                <td>
+                                    <select class="skn-select" [(ngModel)]="item.model_attribute_name">
+                                        <option value="">Select </option>
+                                        <option *ngFor="let modelAttribute of modelApiAttributeList">{{modelAttribute}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="skn-select" [(ngModel)]="item.data_type"
+                                        (change)="onDataTypeChange(item.data_type,i)">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let datatype of datatypesarray">{{datatype}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="select_{{i}}" class="skn-select" [(ngModel)]="item.reference_data_id" [disabled]="item.data_type!='Reference Data'">
+                                        <option value="null">Select</option>
+                                        <option *ngFor="let data of refrenceDataList" [value]="data._id">
+                                            {{data.reference_data_name.replace('_',' ')}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" *ngIf="!lastIndex" class="cursor-pointer"
+                                        data-bs-title="Delete"><img src="../assets/images/icon-trash.svg"
+                                            (click)="removeAttributeRow(i)"
+                                            class="skn-config-edit-icon skn-action-icon me-3"></a>
+    
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" *ngIf="lastIndex" class="cursor-pointer"
+                                        data-bs-title="Add" (click)="addNewAtribute()"><img
+                                            src="../assets/images/zoom-in.svg"
+                                            class="skn-config-edit-icon skn-action-icon"></a>
+    
+                                    <!-- <a><img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon skn-action-icon " (click)="removeAttributeRow(i)"/></a> -->
+    
+                                </td>
+    
+                            </tr>
+    
+                        </tbody>
+                    </table>
+                </div>
+                <!--===========================================================================================-->
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer" *ngIf="updateButton === false">
+                <button type="button" #cancelAddDocModel class="skn-transparent-btn"
+                    data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" 
+                    [ngClass]="{'skn-filled-btn' : addDocumentForm?.documentName!='','skn-outline-btn': addDocumentForm?.documentName==''}"
+                    (click)="saveDocument()" [disabled]="addDocumentForm?.documentName==''">SUBMIT</button>
+                   
+            </div>
+            <div class="modal-footer"  *ngIf="updateButton === true">
+                <button type="button" #cancelAddDocModel class="skn-transparent-btn"
+                    data-bs-dismiss="modal">CANCEL</button>
+                    <button type="button" 
+                    [ngClass]="{'skn-filled-btn' : addDocumentForm?.documentName!='','skn-outline-btn': addDocumentForm?.documentName==''}"
+                    (click)="onSubmitEditDocument()" [disabled]="addDocumentForm?.documentName==''">Update</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="deleteDocuemnt" tabindex="-1" aria-labelledby="deleteDocuemnt" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="skn-modal-title">Are you sure you want to delete ' Document : {{addDocumentForm.document_type}} ' ?</h3>
+                    <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                        aria-label="Close">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-body">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-footer border-0">
+                    <button type="button" #deleteDocumentbtn class="skn-transparent-btn"
+                        data-bs-dismiss="modal">CANCEL</button>
+                    <button type="button" class="skn-filled-btn" (click)="onDeleteDocument()">CONFIRM DELETE</button>
+                </div>
+                <!--================================================================================================-->
+            </div>
+        </div>
+        </div>

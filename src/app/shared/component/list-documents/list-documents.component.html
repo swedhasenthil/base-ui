@@ -1,0 +1,63 @@
+<!-- If Assign task type Manual -->
+<div class="skn-table-cnt allTable" *ngIf="isTaskAssignmentManual">
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="skn-table">
+      <thead>
+          <tr>
+              <th>Document ID</th>
+              <th>Document Name</th>
+              <th>Assignee</th>
+              <th>Document Type</th>
+              <th>Created On</th>
+              <th>Assigned On</th>
+              <th>Last Updated On</th>
+          </tr>
+      </thead>
+      <tbody style="min-height:287px !important">
+          <tr *ngFor="let document of listOfDocuments;"  style="cursor: pointer;"> 
+              <td ><span (click)="getTask(document)">{{document._id}}</span>
+                  <a (click)="copyDocId(document._id)" style="cursor: pointer;" document-toggle="tooltip" document-bs-placement="bottom" title="Copy" id="copyDoc"><img src="../../assets/images/copy-icon.svg" class="ms-3 skn-td-copy-icon"></a>
+                  <span class="badge ms-3 {{ document.badgeClass }}">{{ document.documentLabel}}</span>
+                  <!-- {{document.document_status}} -->
+                  <!-- <span class="badge ms-3 skn-status-badge-rejected" *ngIf="document.document_status == 'rejected_a'">Rejected</span>
+                  <span class="badge ms-3 skn-status-badge-failed" *ngIf="document.document_status == 'failed'">Failed</span>
+                  <span class="badge ms-3 skn-status-badge-completed" *ngIf="document.document_status == 'pending_qc' || document.document_status == 'in_progress_qc' || document.document_status == 'completed_qc' || document.document_status == 'pushed_to_target'">Completed</span>
+                  <span class="badge ms-3 skn-status-badge-inqueue" *ngIf="document.document_status == 'in-process' || document.document_status == 'uploaded' ||
+                   document.document_status == 'Pending split' || document.document_status == 'Splitting completed' ||
+                   document.document_status == 'Failed split' || document.document_status == 'Pending image conversion' ||
+                   document.document_status == 'Failed image conversion' || document.document_status == 'Pending ocr classification' ||
+                   document.document_status == 'Failed ocr classification' || document.document_status == 'Pending image classification' ||
+                   document.document_status == 'Failed image classification' || document.document_status == 'Pending extraction' ||
+                   document.document_status == 'Failed extraction' || document.document_status == 'Pending contextualization' ||
+                   document.document_status == 'Failed contextualization'">In Queue</span> -->
+                  <!-- <span class="badge ms-3 skn-status-badge-pendingqc" *ngIf="document.document_status == 'pending_qc'">Pending QC</span> -->
+                  <!-- <span class="badge ms-3 skn-status-badge-inqueue" *ngIf="document.document_status == 'pending_a'">Pending Review</span>
+                  <span class="badge ms-3 skn-status-badge-inprogress" *ngIf="document.document_status == 'in_progress_a'">In Progress</span> -->
+              </td>
+              <td title="{{document.document_name}}" (click)="getTask(document)">{{document.document_name | truncate:[20, '...']}}</td>
+              <td (click)="getTask(document)">{{document.user_id == null ? 'NA': document.user_id.user_name}}</td>
+              <td (click)="getTask(document)">NA</td>
+              <td (click)="getTask(document)">{{document.uploaded_timestamp | date:'d MMM YY HH:mm'}}</td>
+              <td (click)="getTask(document)">{{document.uploaded_timestamp | date:'d MMM YY HH:mm'}}</td>
+              <td (click)="getTask(document)">{{document.last_modified_timestamp | date:'d MMM YY HH:MM'}}</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+<!-- If Assign Task type Auto -->
+<div *ngIf="!isTaskAssignmentManual" class="skn-analyst-landing-container mt-5">
+  <p class="text-center">
+      <strong>Hello {{userName}},</strong> <br />
+      Click on the below button to start.
+  </p>
+  <p class="text-center">
+      <button id="get-task-button" type="button" class="skn-filled-btn" *ngIf="!getTaskIsDisabled"
+      (click)="getTask(false)">
+          Get Task
+          
+      </button>
+  </p>
+  <p *ngIf="documentEmpty === true" class="text-center">
+    No documents available for review. Please check after sometime.
+  </p>
+</div>

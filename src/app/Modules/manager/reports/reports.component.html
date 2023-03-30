@@ -1,0 +1,252 @@
+
+    <div class="skn-top-filterbar align-items-center">
+
+        <div>
+            <div class="dropdown skn-top-filterbar-item-select">
+             
+            <div class="skn-top-filterbar-item-label">Project Name:</div>
+                <button class="btn dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                    {{selectedProjectName}} <i class="bi bi-chevron-down ms-2"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let projects of projectsList; let i = index" (click)="onProjectChange($event)"><a class="dropdown-item">{{projects.projectName}}</a></li>
+                </ul>
+            
+        </div>
+    </div>
+    
+
+        <!--=======================================================================================================================-->
+        <!-- <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">Date</div>
+           
+            <input type="button"  placeholder="Daterangepicker" class="btn dropdown-toggle" bsDaterangepicker [datesDisabled]="disabledDates"
+         [minDate]="minDate" [maxDate]="maxDate" [(ngModel)]="bsRangeValue" [bsConfig]="{ isAnimated: true }" (change)="onTimePeriodChange()">
+            
+        </div> -->
+
+    
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">Date:</div>
+           <input type="button"  placeholder="Daterangepicker" class="btn dropdown-toggle" bsDaterangepicker [datesDisabled]="disabledDates"
+         [minDate]="minDate" [maxDate]="maxDate" [(ngModel)]="bsRangeValue" [bsConfig]="{ isAnimated: true }" (change)="onTimePeriodChange()">
+        </div>
+        <!--=======================================================================================================================-->
+
+    </div>
+    <!-- ======================================================= filterbar-ends-here =================================================== -->
+
+    <div class="skn-card-table-cnt">
+        <div class="skn-card-table skn-card-table-full">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center"><h3 class="skn-card-table-title">Documents Processed</h3></th>
+                        <th class="text-center"><h3 class="skn-card-table-title">Pages Uploaded</h3></th>
+                        <th class="text-center"><h3 class="skn-card-table-title">Straight-Through Processing</h3></th>
+                        <th class="text-center"><h3 class="skn-card-table-title">Skense:  Level Analyst</h3></th>
+                        <th class="text-center"><h3 class="skn-card-table-title">Skense Accuracy:  Level QC</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center"> 
+                        
+                         <img src="../assets/images/icon1611221141.svg"/>
+
+                        </td>
+                        <td class="text-center"><img src="../assets/images/icon1611221141.svg"/></td>
+                        <td class="text-center"><img src="../assets/images/icon1611221141.svg"/></td>
+                        <td class="text-center"><img src="../assets/images/icon1611221141.svg"/></td>
+                        <td class="text-center"><img src="../assets/images/icon1611221141.svg"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+    </div>
+    <!-- =================================================================================================================================== -->
+
+    <div class="skn-card-table-cnt">
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><h3 class="skn-card-table-title">Daily Volume</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><h3 class="skn-card-table-title">Reasons to Reject Document</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><h3 class="skn-card-table-title">Average Time Spent on a Document by Analyst</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><h3 class="skn-card-table-title">Average Time Spent on a Document by QC</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="10"><h3 class="skn-card-table-title">Daily Performance Report for Analyst</h3></th>
+                    </tr>
+                    <tr>
+                        <th>Group</th>
+                        <th>Group Performance</th>
+                        <th>Group SLA</th>
+                        <th>Analyst</th>
+                        <th>Avg. Docs Completed</th>
+                        <th>Indivisual SLA</th>
+                        <th>Reviewed Docs</th>
+                        <th>Fields Changed</th>
+                        <th>Average Review Time(mins)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td rowspan="25">
+                        {{ analystReport[0].user_group }}
+                      </td>
+                      <td rowspan="25" class="">
+                        {{ analystReport[0].group_performance }}
+                      </td>
+                      <td rowspan="25">{{ analystReport[0].group_sla }}</td>
+                      <td>{{ analystReport[0].data[0].user }}</td>
+                      <td>{{ analystReport[0].average_sla }}</td>
+                      <td>{{ analystReport[0].individual_sla }}</td>
+                      <td class="">
+                        {{ analystReport[0].data[0].review_count }}
+                      </td>
+                    </tr>
+                    <tr *ngFor="
+                        let user of analystReport[0].data;
+                        let isNotFirst = index
+                      ">
+                      <td *ngIf="isNotFirst">{{ user.user }}</td>
+                      <td *ngIf="isNotFirst">
+                        {{ analystReport[0].average_sla }}
+                      </td>
+                      <td *ngIf="isNotFirst">
+                        {{ analystReport[0].individual_sla }}
+                      </td>
+                      <td *ngIf="isNotFirst" class="">
+                        {{ user.review_count }}
+                      </td>
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="10"><h3 class="skn-card-table-title">Daily Performance Report for QC</h3></th>
+                    </tr>
+                    <tr>
+                        <th>Group</th>
+                        <th>Group Performance</th>
+                        <th>Group SLA</th>
+                        <th>QC</th>
+                        <th>Avg. Docs Completed</th>
+                        <th>Indivisual SLA</th>
+                        <th>Reviewed Docs</th>
+                        <th>Fields Changed</th>
+                        <th>Average Review Time(mins)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td rowspan="25">
+                        {{ QCReport[0].user_group }}
+                      </td>
+                      <td rowspan="25" class="">
+                        {{ QCReport[0].group_performance }}
+                      </td>
+                      <td rowspan="25">{{ QCReport[0].group_sla }}</td>
+                      <td>{{ QCReport[0].data[0].user }}</td>
+                      <td>{{ QCReport[0].average_sla }}</td>
+                      <td>{{ QCReport[0].individual_sla }}</td>
+                      <td class="">
+                        {{ QCReport[0].data[0].review_count }}
+                      </td>
+                    </tr>
+                    <tr *ngFor="let user of QCReport[0].data; let isNotFirst = index">
+                      <td *ngIf="isNotFirst">{{ user.user }}</td>
+                      <td *ngIf="isNotFirst">
+                        {{ QCReport[0].average_sla }}
+                      </td>
+                      <td *ngIf="isNotFirst">
+                        {{ QCReport[0].individual_sla }}
+                      </td>
+                      <td *ngIf="isNotFirst" class="">
+                        {{ user.review_count }}
+                      </td>
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+        <div class="skn-card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><h3 class="skn-card-table-title">Analyst Accuracy</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ================================================================================================ -->
+    </div>
+    <!-- ==================================================================== card-ends-here ======================================================== -->
+
+  

@@ -1,0 +1,857 @@
+<div class="skn-top-filterbar align-items-center">
+    <div>
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">View by:</div>
+            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{selecteduserGroupName}} <i class="bi bi-chevron-down ms-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click) ="onProjectChange(1)">User Groups</a></li>
+              <li><a class="dropdown-item" (click) ="onProjectChange(2)">Users</a></li>
+            </ul>
+            
+            <!-- <select class="dropdown-menu" >
+                <option >User Groups</option>
+                <option >User </option>
+            </select> -->
+
+        </div>
+    </div>
+    <!--=======================================================================================================================-->
+
+    <button type="button" class="skn-filled-btn ms-auto" data-bs-toggle="modal" data-bs-target="#cngModal" (click)="addNewUsergroup()">CREATE NEW GROUP</button>
+    <button type="button" class="skn-filled-btn" data-bs-toggle="modal" data-bs-target="#anuModal" (click)="addNewUser()">ADD NEW USER</button>
+
+</div>
+<!-- ======================================================= filterbar-ends-here =================================================== -->
+
+<div class="skn-table-cnt allTable" [ngClass]="{'d-print-none': userGroupList == true,  'd-none':userGroupList == false }"> 
+        <table id="myTable" class="skn-table" datatable [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th class="user">User Groups</th>
+                <th class="domin">Domain/Specialization</th>
+                <th class="description">Description</th>
+                <th class="user_count">Users</th>
+                <th class="project_count">Projects</th>
+                <th class="status">Status</th>
+                <th class="action"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr *ngFor="let userGroup of userGroupsData; index as i">
+                <td class="user" title="{{userGroup.user_group_name }}">{{userGroup.user_group_name  | truncate:[15, '...']}}</td>
+                <td class="domin" title="{{userGroup.domain_id}}">{{userGroup.domain_id ? userGroup.domain_id.domain_name : 'Not Found' | truncate:[15, '...']}}</td>
+                <td class="description" title="{{userGroup?.description}}">{{userGroup?.description||'NA'| truncate:[15, '...']}}</td>
+                <td class="user_count"><button type="button" class="skn-outline-btn" data-bs-toggle="modal" data-bs-target="#usersInGroup" 
+                    (click)="onUserListInGroupNumberClick(userGroup)">{{userGroup.users.length}}</button></td>
+                <td class="project_count">
+                    <button type="button" class="skn-outline-btn" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-custom-class="custom-popover" 
+                      data-bs-content="Project  Name 01 Project  Name 02 Project  Name 03">{{userGroup.projects.length}}</button>
+                </td>
+                <td class="status">
+                    <div class="form-check form-switch skn-switch-green">
+                        <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch" 
+                        (change)="changeGroupStatus($event.target, userGroup)"
+                        [checked]="userGroup.status=='active'"
+                        id="{{'userGroup-status-switch-'+i}}">
+                        <label class=" custom-control-label"
+                        for="{{ 'userGroup-status-switch-'+i}}"></label>
+                    </div>
+                </td>
+                <td class="action">
+                    <a href="#arugModal" data-bs-toggle="modal">
+                        <img src="../assets/images/person-plus.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Add"
+                        (click)="onCreateUserInGroupIconClick(userGroup)">
+                    </a>
+                    <a href="#dgModal" data-bs-toggle="modal">
+                        <img src="../assets/images/copy-icon.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Copy" 
+                        (click)="onCreateDuplicateGroupIconClick(userGroup)">
+                    </a>
+                    <a href="#egModal" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit"
+                        (click)="onCreateEditGroupIconClick(userGroup)" (click)="addNewUsergroup()">
+                    </a>
+                    <a href="#deleteGroupModal" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"
+                        (click)="onDeleteGroupIconClick(userGroup)">
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- ============================================================================================================================================= -->
+
+ <!-- Underwriting Review User Group -->
+ <div class="modal fade" id="usersInGroup" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">{{userGroupName}} User Group</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+
+                <table class="w-100">
+
+                    <tr class="border-bottom">
+                        <th class="p-3">
+                            <label class="skn-modal-field-label-2">Email</label>
+                        </th>
+                        <th class="p-3">
+                            <label class="skn-modal-field-label-2">User Name</label>
+                        </th>
+                        <th class="p-3">
+                            <label class="skn-modal-field-label-2">Role</label>
+                        </th>
+                        <th class="p-3">
+                            <label class="skn-modal-field-label-2">Status</label>
+                        </th>
+                    </tr>
+
+                    <tr class="border-bottom" *ngFor="let user of userList; index as i">
+                        <td class="modal-body-text p-3">
+                             {{user.email}}
+                        </td>
+                        <td class="modal-body-text p-3">
+                            {{user.name}}  
+                        </td>
+                        <td class="modal-body-text p-3" >
+                            <span *ngFor="let role of user.roles">
+                             <span class="badge ms-2 skn-status-badge-pendingqc ">{{role.role_name != null ? role.role_name : "NA" }}</span>
+                            </span>                      
+                        </td>
+                        <td class="modal-body-text p-3">
+                            <div class="form-check form-switch skn-switch-green">
+                                <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch" 
+                                (change)="onUserStatusChangeForGroup($event.target, user)"  [checked]="user.status=='active'" id="{{'user-status-switch-'+i}}">
+                                <label class="custom-control-label" for="{{'user-status-switch-'+i}}"></label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+  <!-- Create New Group -->
+  <div class="modal fade" id="cngModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Create New Group</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <form class="p-3 create-group-form" action="" [formGroup]="createGroupForm" autocomplete="off"
+                     class="create-group-form" method="post" accept-charset="utf-8">
+            <div class="modal-body">               
+                <table class="w-100">
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2" for="groupNameInput">Group Name*</label>
+                        </td>
+                        <td class="py-3">
+                            <input type="text" placeholder="" class="skn-input" formControlName="groupName" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2" for="domainselect">Domain/Specialization*</label>
+                        </td>
+                        <td class="py-3">
+                            <select class="skn-select"  formControlName="domainDropdown">
+                                <option selected hidden>Click to select Domain/Specialization</option>
+                                <option *ngFor="let domain of domainsObject | keyvalue">{{ domain.key }}</option>
+                            </select>
+                            <span class="skn-field-note">Select items that defines the group's expertise</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2" for="description">Description*</label>
+                        </td>
+                        <td class="py-3">
+                            <textarea rows="5" class="skn-input" id="FormControlTextarea" formControlName="description"></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+            
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button #cancelCreateNewgroup type="button" class="skn-transparent-btn" data-bs-dismiss="modal"  (click)="createGroupFormCancelClick()">CANCEL</button>
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="model" [disabled]="!createGroupForm.valid" (click)="onCreateGroupSubmit()">SUBMIT</button>
+            </div>
+            <!--===============================================================================================-->
+          </form>
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+<!-- Add New User -->
+<div class="modal fade" id="anuModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Add New User</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close"
+                (click)="getUsergroups()">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+                <form action="" [formGroup]="addUserForm" autocomplete="off" class="add-user-form" method="post"
+                accept-charset="utf-8">
+                <table class="w-100">
+
+                    <tr>
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2" for="employee-id">Employee ID*</label>
+                        </td>
+                        <td class="p-3">
+                            <input type="text" placeholder="" class="skn-input" required formControlName="employeeId"
+                            (keyup)="checkEmpty()">
+                            <span class="skn-field-note">Type employee ID and press tab</span>
+                        </td>
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2"  for="user-name">Username*</label>
+                        </td>
+                        <td class="p-3">
+                            <input type="text" placeholder="" class="skn-input" required formControlName="userName" (keyup)="checkEmpty()">
+                            <span class="skn-field-note">Type employee Username and press tab</span>
+                        </td>
+                        <td class="p-3"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2" for="employee-id" >Email ID*</label>
+                        </td>
+                        <td class="p-3" colspan="3">
+                            <input type="email" placeholder="" class="skn-input" required formControlName="emailId" (keyup)="checkEmpty()" >
+                            <span class="skn-field-note">Type employee email ID and press tab</span>
+                        </td>
+                        <td class="p-3"></td>
+                    </tr>
+
+                    <tr class="skn-bg-highlight" *ngFor="let mul_userandrole of multiple_userandrole; let i = index;">
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2">Assign Group*</label>
+                        </td>
+                        <td class="p-3">
+                            <select class="skn-select" formControlName="assignGroupDropdown" (change)="selectedGroupInDropdown($event,i)">
+                                <option selected hidden>Click to select Group</option>
+                                <option *ngFor="let userGroup of userGroupsData" [disabled]="userGroup.isdisabled">
+                                    {{userGroup.user_group_name}}</option>
+                            </select>
+                        </td>
+
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2">Assign Role*</label>
+                        </td>
+                        <td class="p-3" style="font-size :13px !important">
+                            <!-- <select class="skn-select" formControlName="assignGroupDropdown" (change)="selectedGroupInDropdown($event,i)">
+                                <option selected hidden>Click to select Group</option>
+                                <option *ngFor="let userGroup of userGroupsData" [disabled]="userGroup.isdisabled">
+                                    {{userGroup.user_group_name}}</option>
+                            </select> -->
+
+                            <ng-multiselect-dropdown [placeholder]="'Click to select Roles'"
+                                [settings]="dropdownSettings" [data]="dropdownList" (onSelect)="onItemSelect($event,i)"
+                                (onDeSelect)="onDeSelect($event,i)" (onSelectAll)="onSelectAll($event,i)">
+                             </ng-multiselect-dropdown>
+                            
+                        </td>
+                        <td>
+                            <span  *ngIf="i === multiple_userandrole.length -1 " (click)="adduserandrole()" >
+                                <img src="../assets/images/zoom-in.svg"/>
+                            </span>
+                            <span (click)="removeuserandrole(i)" *ngIf="i != multiple_userandrole.length -1 ">
+                                <img src="../assets/images/icon-trash.svg" >
+                            </span>
+                        </td>
+                    </tr>
+
+                </table>
+              </form>
+            </div>
+            <!--===============================================================================================-->
+
+            <div class="modal-footer">
+                <button type="button" #cancelAddNewUser class="skn-transparent-btn" data-bs-dismiss="modal"  (click)="getUsergroups()">CANCEL</button>
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="model" [disabled]="!addUserForm.valid" (click)="onAddUserSubmit()">ADD USER</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+ <!-- Duplicate Group Modal -->
+ <div class="modal fade" id="dgModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Duplicate Group</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+                <form class="p-3 create-group-form" action="" class="create-group-form" method="post">
+                <table class="w-100">
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2">Group Name</label>
+                        </td>
+                        <td class="py-3">
+                            <input type="text" placeholder="Underwriting Review - copy" class="skn-input" required 
+                            [(ngModel)]="duplicateUserGroupName" name="duplicategroupname">
+                        </td>
+                    </tr>
+
+                </table>
+            </form>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" (click)="createDulicateGroupFormCancelClick()">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="onCreateDuplicateGroupSubmit()" data-bs-dismiss="modal">CREATE GROUP</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+<!-- Delete Group Modal -->
+<div class="modal fade" id="deleteGroupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete user group <strong>'{{deleteUserGroupName}}'</strong>?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="modal" (click)="onDeleteGroupClick()">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+<!-- Edit Group -->
+<div class="modal fade" id="egModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Edit Group</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+                <form class="p-3 create-group-form" [formGroup]="editUserGroupForm" action="" class="create-group-form"
+                method="post" accept-charset="utf-8">
+
+                <table class="w-100">
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2">Group Name*</label>
+                        </td>
+                        <td class="py-3">
+                            <input type="text" placeholder="" class="skn-input" required
+                            formControlName="editGroupName" value="editProjectObject.project_name">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2">Domain/Specialization*</label>
+                        </td>
+                        <td class="py-3">
+                            <select class="skn-select"  formControlName="editdomainDropdown">
+                                 <option [value]="domain.value" *ngFor="let domain of domainsObject | keyvalue">{{ domain.key }}</option>
+                            </select>
+                            <span class="skn-field-note">Select items that defines the group's expertise</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="py-3">
+                            <label class="skn-modal-field-label-2">Description*</label>
+                        </td>
+                        <td class="py-3">
+                            <textarea rows="5" placeholder="" class="skn-input" formControlName="description"></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+             </form>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" data-bs-dismiss="modal" (click)="onEditUserGroupSubmit()">SUBMIT</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+     <div class="skn-table-cnt allTable" [ngClass]="{'d-print-none': userListData == true,  'd-none':userListData == false }">
+        <table id="myTable1" class="skn-table" datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger1" >
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Email</th>
+                <th>User Name</th>
+                <th>Projects</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr  *ngFor="let user of userData; index as i" [ngClass]="{'table-active': user.super_admin }">
+                <td>{{user.employee_id}}</td>
+                <td title="{{user.email_id}}">{{user.email_id | truncate:[20, '...']}} <span *ngIf="user.super_admin"> (Super Admin) </span></td>
+                <td title="{{user.user_name}}">{{user.user_name | truncate:[20, '...']}}</td>
+                <td>
+                    
+                    <button type="button" class="skn-outline-btn" data-bs-toggle="modal" data-bs-target="#viewProject" (click)="onProjectCountClick(user)" *ngIf="user.projects_count != null" >{{user.projects_count}} </button></td>
+                <td>
+                    <div class="form-check form-switch skn-switch-green">
+                        <input class="form-check-input skn-switch-green-input" type="checkbox" role="switch" 
+                        [checked]="user.status=='active'" id="{{ 'user-status-switch-'+i}}"
+                        (change)="onUserStatusChange($event.target, user)">
+                        <label class="custom-control-label" for="{{'user-status-switch-'+i}}"></label>
+                    </div>
+                </td>
+                <td style="cursor: pointer;">
+                    <a href="#editUser" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon me-3" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Edit"
+                        (click)="onEditUserIconClick(user)">
+                    </a>
+                    <a href="#deleteUserModal" data-bs-toggle="modal">
+                        <img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete"
+                        (click)="onDeleteUserIconClick(user)">
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- ============================================================================================================================================= -->
+<!-- View Project -->
+<div class="modal fade" id="viewProject" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">View Project</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+
+                <table class="w-100">
+
+                    <tr>
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Employee ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmpId}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Username
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserUsername}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Email ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmailId}}</div>
+                        </th>
+                    </tr>
+
+                    <tr class="skn-bg-highlight">
+                        <td class="p-3 skn-modal-field-label-2">Project</td>
+                        <td class="p-3 skn-modal-field-label-2" colspan="8">Role</td>
+                    </tr>
+
+                    <!-- <tr class="skn-bg-highlight" *ngFor="let projectAndRoleArray of clickedUserProjectArray; index as i">
+                        <td class="p-3 modal-body-text"> {{projectAndRoleArray.name}}</td>
+
+                        <td class="p-3" *ngFor="let role of projectAndRoleArray.roles">
+                            <div class="d-flex gap-3" >
+                                <div class="skn-chips" role="button">{{role}}</div>                            
+                            </div>
+                        </td>
+                    </tr> --> 
+                    <tr class="skn-bg-highlight" *ngFor="let projectAndRoleArray of clickedUserProjectArray; index as i">
+                        <td class="p-3 modal-body-text">{{projectAndRoleArray.name}}</td>
+                        <td class="p-3" colspan="2">
+                            <div class="d-flex gap-3">
+                                <span *ngFor="let role of projectAndRoleArray.roles">
+                                    <div class="skn-chips" role="button">{{role}}</div>
+                                </span>                              
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-filled-btn"  data-bs-dismiss="modal">OK</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- View Project -->
+<div class="modal fade" id="viewProject11" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">View Project</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+
+                <table class="w-100">
+
+                    <tr>
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Employee ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmpId}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Username
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserUsername}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Email ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmailId}}</div>
+                        </th>
+                    </tr>
+
+                    <tr class="skn-bg-highlight">
+                        <td class="p-3 skn-modal-field-label-2">Project</td>
+                        <td class="p-3 skn-modal-field-label-2" colspan="2">Role</td>
+                    </tr>
+
+                    <tr class="skn-bg-highlight" *ngFor="let projectAndRoleArray of clickedUserProjectArray; index as i">
+                        <td class="p-3 modal-body-text">{{projectAndRoleArray.name}}</td>
+                        <td class="p-3" colspan="2">
+                            <div class="d-flex gap-3">
+                                <span *ngFor="let role of projectAndRoleArray.roles">
+                                    <div class="skn-chips" role="button">{{role}}</div>
+                                </span>                              
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- <tr class="skn-bg-highlight">
+
+                        <td class="p-3 modal-body-text">Split Demo</td>
+
+                        <td class="p-3" colspan="2">
+                            <div class="d-flex gap-3">
+                                <div class="skn-chips" role="button">Doc Specialist</div>
+                                <div class="skn-chips" role="button">SME</div>
+                            </div>
+                        </td>
+
+                    </tr> -->
+
+                </table>
+
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-filled-btn">OK</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--=======================================================================================================-->
+ <!-- Delete User Modal -->
+ <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete user <strong>'{{deleteUserName}}'</strong>?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn"  (click)="onDeleteUserClick()" data-bs-dismiss="modal">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+<!-- edit User -->
+<div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Edit User</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+
+                <table class="w-100 ">
+
+                    <tr>
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Employee ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmpId}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Username
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserUsername}}</div>
+                        </th>
+
+                        <th class="p-3">
+                            <div class="skn-modal-field-label-2">
+                                Email ID
+                            </div>
+                            <div class="skn-modal-field-label">{{clickedUserEmailId}}</div>
+                        </th>
+                        <th></th>
+                    </tr> 
+
+                    <tr class="skn-bg-highlight" *ngFor="let userGroupAndRole of clickedUserGroupsAndRoles; let i = index;">
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2">Assign Group*</label>
+                        </td>
+                        <td class="p-3">
+                            <select class="skn-select" [(ngModel)]="userGroupAndRole.group._id"
+                            (change)="updateUserGroups($event,i)">
+                            <option selected hidden>Click to select Group</option>
+                            <option *ngFor="let userGroup of userGroupsData" [disabled]="userGroup.isdisabled"
+                                [value]="userGroup._id">{{userGroup.user_group_name}}</option>
+                        </select>
+
+                        </td>
+
+                        <td class="p-2">
+                            <label class="skn-modal-field-label-2">Assign Role*</label>
+                        </td>
+                        <td class="p-3" style="font-size: 13px !important;"> 
+                            <ng-multiselect-dropdown [placeholder]="'Click to select Roles'"
+                                    [(ngModel)]="userGroupAndRole.roles" [settings]="dropdownSettings"
+                                    [data]="dropdownList" (onSelect)="onItemSelect($event,i)"
+                                    (onDeSelect)="onDeSelect($event,i)" (onSelectAll)="onSelectAll($event, i)">
+                            </ng-multiselect-dropdown>
+                        </td>                       
+
+                        <td class="p-3" >
+                           
+                            <span (click)="removeUsersGroupAndRole(i)" *ngIf="i != clickedUserGroupsAndRoles.length -1 || multiple_grouprolesinedituser.length != 0">
+                                <img src="../assets/images/icon-trash.svg" >
+                            </span> 
+                            <span (click)="addUsersGroupAndRoleInEditUser()" *ngIf="i === clickedUserGroupsAndRoles.length -1 && multiple_grouprolesinedituser.length === 0">
+                               <img src="../assets/images/zoom-in.svg"/>
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr  class="skn-bg-highlight" *ngFor="let mul_grouprolesinedituser of multiple_grouprolesinedituser; let i = index;">
+                        <td class="p-3" >
+                            <label class="skn-modal-field-label-2">Assign Group*</label>
+                        </td>
+                        <td class="p-3">
+                            <select class="skn-select"
+                                    (change)="selectedGroupInDropdownInEditUser($event, i)">
+                                        <option selected hidden>Click to select Group</option>
+                                        <option *ngFor="let userGroup of userGroupsData" [disabled]="userGroup.isdisabled"
+                                    [value]="userGroup._id">{{userGroup.user_group_name}}</option>
+                            </select>
+                        </td>
+
+                        <td class="p-3">
+                            <label class="skn-modal-field-label-2">Assign Role*</label>
+                        </td>
+                        <td class="p-3">                          
+                            <ng-multiselect-dropdown [placeholder]="'Click to select Roles'" 
+                                [settings]="dropdownSettings" [data]="dropdownList"
+                                (onSelect)="onItemSelectInEditUser($event)"
+                                (onDeSelect)="onDeSelectInEditUser($event)" (onSelectAll)="onSelectAll($event, i)">
+                            </ng-multiselect-dropdown>
+                        </td>                       
+
+                        <td class="p-3">
+                             <span (click)="removeUsersGroupAndRoleInEditUser(i)" *ngIf="i != multiple_grouprolesinedituser.length -1 ">
+                                <img src="../assets/images/icon-trash.svg" >
+                            </span> 
+                            <span (click)="addUsersGroupAndRoleInEditUser()" *ngIf="i === multiple_grouprolesinedituser.length -1 ">
+                               &nbsp;&nbsp; <img src="../assets/images/zoom-in.svg"/>
+                            </span>
+                        </td>                       
+                    </tr>
+
+                    
+                </table>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" >CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="onEditUserSubmit()" [disabled]="!isEditUserDataValid" data-bs-dismiss="modal" >Submit</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!--=======================================================================================================-->
+
+ <!-- Add/Remove users to group Modal -->
+ <div class="modal fade" id="arugModal" tabindex="-1" aria-labelledby="manageAttributesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Add/Remove users to group "{{userGroupName}}"</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body-resoure">
+
+                <div class="input-group mx-auto my-3 skn-search-box width-fit-content">
+                    <i class="bi bi-search input-group-text"></i>
+                    <!-- <input type="search" class="form-control" placeholder="Search Users"> -->
+                    <input type="search" class="form-control" placeholder="Search Users" [(ngModel)]="user">
+                </div>
+                
+                <div class="d-flex" style="height: 400px;"> 
+                    <div class="skn-border-right-gray w-50 px-3 skn-modal-sa-cnt">
+                        <div class="skn-check mb-2">
+                          <!--   <input class="form-check-input skn-check-input" type="checkbox"> -->
+                          <input class="form-check-input skn-check-input" type="checkbox" id="checkAll" [checked]="isCheckAll" (change)="selectLeftAll($event.target)">
+
+                          &nbsp; <label class="skn-check-label">
+                                <strong>Available Users</strong>
+                            </label>
+                        </div>
+                        <div style="height: 65%;overflow-y: auto;">
+                            <div class="skn-check mb-2" *ngFor="let user of leftAttributeList | filter:user;let i as index" >
+                                <input class="form-check-input skn-check-input" type="checkbox" id="{{user.user_name}} {{user.name}}" #checkbox (change)="onChangeLeft(user,$event.target,i)">
+                                <label class="skn-check-label" for="{{user.user_name}} {{user.name}}" >&nbsp;&nbsp;{{user.name}} {{user.user_name}}
+                                </label>
+                            </div> 
+                        </div>    
+                        
+                  
+                            <div class="bottom-0 mt-4"> 
+                            <button type="button" class="skn-disabled-outline-btn" *ngIf="isCheckLeft === false" disabled>ADD USERS</button>
+                            <button type="button" class="skn-outline-btn" *ngIf="isCheckLeft === true" (click)="addAtributes()">ADD USERS</button>
+                        </div>
+                       
+                    </div>
+                    <!--==========================================================================-->
+
+                    <div class="skn-border-right-gray px-3 skn-modal-sa-cnt w-50">
+                        <div class="skn-check mb-2">
+                            <input class="form-check-input skn-check-input" type="checkbox" id="isCheckAlls" [checked]="isCheckAlls" (change)="selectRightAll($event.target)">
+                            &nbsp; <label class="skn-check-label">
+                                    <strong>Selected Users</strong>
+                                </label>
+                        </div>
+
+                        <div style="height: 65%;overflow-y: auto;">
+                            <div class="skn-check mb-2" *ngFor="let user of rightAttributeList| filter:user;let i as index">
+                                <input class="form-check-input skn-check-input" type="checkbox" id="{{user.user_name}} {{user.name}}" #checkboxRight (change)="onChangeRight(user,$event.target,i)">
+                                <label class="skn-check-label" for="{{user.user_name}} {{user.name}}">&nbsp;&nbsp;{{user.name}} {{user.user_name}}
+                                </label>
+                            </div>   
+                        </div> 
+                        
+                        <div class="bottom-0 mt-4">
+                            <button type="button" class="skn-disabled-outline-btn" *ngIf="disableRight === false" disabled>Remove USER</button>
+                            <button type="button" class="skn-outline-btn" (click)="removeAttributes()" *ngIf="disableRight === true" >Remove USER</button>
+                        </div>
+                                             
+                    </div>
+                    <!--==========================================================================-->
+                </div>
+                <!--===========================================================================================-->               
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn"  (click)="addAndRemoveUsers()" data-bs-dismiss="modal">SUBMIT</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>

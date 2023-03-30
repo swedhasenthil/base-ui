@@ -1,0 +1,67 @@
+.dataTables_scrollBody {
+    margin-top: -16px;
+    max-height:40vh !important
+}
+@media screen and (min-width: 1440px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:75vh !important
+    }
+}
+@media screen and (min-width: 1366px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:46vh !important
+    }
+}
+@media screen and (min-width: 1620px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}
+@media screen and (min-width: 1920px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}
+.truncate {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.no{
+    width:5% !important
+}
+.name{
+    width:15% !important
+}
+.url
+{
+    width:10% !important
+}
+.des{
+    width:10% !important
+}
+.end{
+    width:10% !important
+}
+.source{
+    width:10% !important
+}
+.dest{
+    width:10% !important
+}
+.input{
+    width:10% !important
+}
+.output{
+    width:10% !important
+
+}
+.action{
+    width:9% !important
+
+}

@@ -1,0 +1,84 @@
+<table class="w-100">
+
+    <tr>
+        <td class="py-3 ps-3">
+            <label class="skn-modal-field-label-2">Document Name*</label>
+        </td>
+        <td class="py-3 pe-3">
+
+            <select class="skn-select" (ngModelChange)="onChangeDocTypeDropdown(selectedDocType, $event)"
+            [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedDocType"
+            [disabled]="modalState == 2">
+            <option *ngFor="let item of projectDocumentTypes" [ngValue]="item.document_type_id._id">
+                {{ item.document_type_id.document_type }}
+            </option>
+        </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="py-3 ps-3">
+            <label class="skn-modal-field-label-2">Rule Name</label>
+        </td>
+        <td class="py-3 pe-3">
+            <input type="text" [(ngModel)]="selectedRuleName"  class="skn-input">
+
+        </td>
+    </tr>
+
+</table>
+
+<!--===========================================================================================-->
+<div class="skn-modal-table-cnt">
+    <table class="skn-modal-table">
+        <thead>
+            <tr>
+                <th class="skn-modal-field-label-2">Primary Attributes</th>
+                <th class="skn-modal-field-label-2">Condition</th>
+                <th class="skn-modal-field-label-2">Secondary Attribute</th>
+                <th class="skn-modal-field-label-2">Value</th>
+                <th class="skn-modal-field-label-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let obj of attributes; let  attrIndex = index;let lastIndex=last">
+                <td>
+                    <select class="skn-select" name="primaryAttribute" (change)="onChangePrimateAttributeDropdown($event, obj)"
+                    [ngModelOptions]="{standalone: true}" [(ngModel)]="obj.selectedPrimaryAttribute">
+                    <option *ngFor="let item of obj.primaryAttributes; index as i"
+                        [disabled]="obj.selectedSecondaryAttribute == item.attribute_name" [value]="item.attribute_name">
+                        {{ item.attribute_name }}
+                    </option>
+                </select>
+                </td>
+                <td>
+                    <select class="skn-select" [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="obj.selectedCondition">
+            <option *ngFor="let item of conditions">
+                {{ item }}
+            </option>
+        </select>
+                </td>
+                <td>
+                    <select class="skn-select" [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangeSecondaryAttributeDropdown($event, obj)"
+            [(ngModel)]="obj.selectedSecondaryAttribute">
+            <!-- <option ngValue="Value">Value</option> -->
+            <option *ngFor="let item of obj.secondaryAttributes"
+                [disabled]="(obj.selectedPrimaryAttribute == item.attribute_name || obj.selectedPrimaryAttributeDataType != item.data_type) && item.attribute_name != 'Value'" [ngValue]="item.attribute_name">
+                {{ item.attribute_name }}
+            </option>
+        </select>
+                </td>
+                <td>
+                    <input type="text" id="value" name="value" class="skn-input" [placeholder]="obj.selectedSecondaryAttribute != 'Value' ? '' : 'Enter ' + obj.selectedAttributeDataType"
+                    [ngModelOptions]="{standalone: true}" [(ngModel)]="obj.selectedValue" autocomplete="off" [disabled]="obj.selectedSecondaryAttribute != 'Value'">
+                 </td>
+                    <td>
+                    <a *ngIf="!lastIndex"  data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete" data-bs-target="#addRuleModal" data-bs-toggle="modal" (click)="removeAttributeRow(attrIndex)"><img src="../assets/images/icon-trash.svg"  class="skn-config-edit-icon skn-action-icon me-3"></a>
+                    <a *ngIf="lastIndex" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Add" (click)="addNewAttributesForRule(obj)"><img src="../assets/images/zoom-in.svg" class="skn-config-edit-icon skn-action-icon"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--===========================================================================================-->

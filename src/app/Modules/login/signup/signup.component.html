@@ -1,0 +1,93 @@
+<div class="container">
+    <form [formGroup]="formSignup" (ngSubmit)="signup()">
+    <div class="row justify-content-center mt-4">
+        <div class="card w-50 p-5">
+            <div>
+                <h2 class="text-center">Signup</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">First Name</label>
+                    <input type="text" class="form-control" formControlName="firstName" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.firstName.errors}"> 
+                    <div *ngIf="f.firstName.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.firstName.errors?.required">First Name is Required</div>
+                    </div>
+                </div>
+                 
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">Last Name</label>
+                <input type="text" class="form-control" formControlName="lastName" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.lastName.errors}">
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex px-0 py-4">
+                        <label for="">Gender</label>
+                        <input type="radio" class="m-2" name="gender" value="1" formControlName="gender">Male
+                        <input type="radio" class="m-2" name="gender" value="0" formControlName="gender">Female
+                    </div>
+                </div>   
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">Date of Birth</label>
+                    <div class="w-100">
+                        <!-- <p-calendar class="w-100" [maxDate]="dateTime" placeholder="mm-dd-yy" dateFormat="mm-dd-yy" [(ngModel)]="dob" formControlName="dob" [style]="{'width':'100%'}" [showIcon]="true" [ngClass]="{'is-invalid':submited && f.dob.errors}"></p-calendar> -->
+                    </div>
+                    <div *ngIf="f.dob.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.dob.errors?.required">Date of Birth is Required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">Email</label>
+                    <input type="text" class="form-control" formControlName="email" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.email.errors}">
+                    <div *ngIf="f.email.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.email.errors?.required">Email is Required</div>
+                        <div class="alert alert-danger" *ngIf="f.email.errors?.pattern">Enter Valid Email</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">Mobile</label>
+                    <input type="text" class="form-control" formControlName="mobile" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.mobile.errors}">
+                    <div *ngIf="f.mobile.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.mobile.errors?.required">Mobile is Required</div>
+                        <div class="alert alert-danger" *ngIf="f.mobile.errors?.pattern">Enter Only Numbers</div>
+                        <div class="alert alert-danger" *ngIf="f.mobile.errors?.maxlength">Enter Valid Mobile Number</div>
+                        <div class="alert alert-danger" *ngIf="f.mobile.errors?.minlength">Enter Valid Mobile Number</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">User Name</label>
+                    <input type="text" class="form-control" formControlName="userName" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.userName.errors}">
+                    <div *ngIf="f.userName.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.userName.errors?.required">User Name is Required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="">Password</label>
+                    <input type="password" class="form-control" formControlName="password" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.password.errors}">
+                    <div *ngIf="f.password.errors && submited">
+                        <div class="alert alert-danger" *ngIf="f.password.errors?.required">Password is Required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col-md-12">
+                    <button class=" btn btn-primary w-100">Signup</button>
+                </div>  
+            </div>
+        </div>
+    </div>
+    
+</form>
+</div>

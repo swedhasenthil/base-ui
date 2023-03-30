@@ -1,0 +1,27 @@
+<div class="skn-top-filterbar" *ngIf="displayList == true">
+  <app-project-filter
+    (selectedProject)="getSelectedProject($event)"
+  ></app-project-filter>
+
+  <app-assignee-filter *ngIf="isTaskAssignmentManual"
+    (selectedAssignee)="getSelectedAssignee($event)"
+  ></app-assignee-filter>
+
+  <app-documents-status-filter
+    [listOfDocumentStatus]="listOfDocumentStatus"
+  ></app-documents-status-filter>
+
+  <!-- Refresh Document icon Starts here -->
+  <a
+    *ngIf="isTaskAssignmentManual"
+    (click)="reloadPage()"
+    class="ms-auto skn-top-filterbar-refresh"
+    data-bs-toggle="tooltip"
+    data-bs-placement="bottom"
+    data-bs-title="Refresh"
+    ><img src="../assets/images/icon-refresh.svg"
+  /></a>
+  <!-- Refresh Document icon Ends here -->
+</div>
+<app-list-documents [statusOptions]="statusOptions"></app-list-documents>
+

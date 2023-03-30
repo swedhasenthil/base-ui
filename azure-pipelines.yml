@@ -1,0 +1,61 @@
+trigger:
+  - manual
+
+pool: WNS
+
+variables:
+  imageName: "skense/nxtgen/ui"
+  containerName: "ui"
+  dockerfile: "$(Build.SourcesDirectory)/Dockerfile"
+  DOCKER_BUILDKIT: 1
+
+stages:
+  - stage: Build
+    jobs:
+    - job: BuildJob
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '16.x'
+        displayName: 'Install Node.js'
+
+   
+      - script: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+          sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner   -Dsonar.projectKey=skense-nxtgen-ui-dev -Dsonar.sources=src   -Dsonar.exclusions=test/**,e2e/**,node_modules/** -Dsonar.host.url=https://sonar.wnsagilius.com   -Dsonar.login=e60e1d150557277e3202af3949f6d6895eb715cd
+        displayName: 'sonar scanner'
+      
+  - stage: BuildPush
+    jobs:
+      - job: DockerImage
+        steps:
+          - task: Docker@2
+            displayName: Image Creation
+            inputs:
+              containerRegistry: "skense-registery"
+              repository: $(imageName)
+              command: "buildAndPush"
+              dockerfile: $(dockerfile)
+              tags: |
+                latest
+  - stage: Deploy
+    jobs:
+      - deployment: VMDeploy
+        displayName: "Deploy the web application"
+        pool: WNS
+        environment:
+          name: nxtgen-dev
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: CmdLine@2
+                  inputs:
+                    script: |
+                      whoami
+                       sudo -S docker rm --force $(containerName)
+                       sudo -S docker rmi skensecontainer1.azurecr.io/$(imageName):latest
+                       sudo az acr login --name skensecontainer1
+                       sudo docker run -d -it --restart unless-stopped --name $(containerName) -v /config/ui:/usr/share/nginx/html/assets/config -p 4200:80 skensecontainer1.azurecr.io/$(imageName):latest

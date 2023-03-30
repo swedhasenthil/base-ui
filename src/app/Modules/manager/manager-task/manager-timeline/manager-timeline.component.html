@@ -1,0 +1,114 @@
+<div class="modal fade" id="dtModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Document Timeline</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+                    aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+
+                <!-- ========================================================================================================================== -->
+
+
+                <div class="w-100 p-3">
+
+                    <div class="skn-modal-timeline">
+
+                        <div class="skn-modal-timeline-item">
+                            <div class="skn-modal-timeline-title">Uploaded</div>
+                            <div class="skn-modal-timeline-circle skn-bg-gray"
+                                *ngIf="!documentTimeline?.uploaded?.color_code"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-success"
+                                *ngIf="documentTimeline?.uploaded?.color_code == 'success'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-warning"
+                                *ngIf="documentTimeline?.uploaded?.color_code == 'in_progress'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-danger"
+                                *ngIf="documentTimeline?.uploaded?.color_code == 'failed'"></div>
+                            <div class="skn-modal-timeline-text">
+                                {{documentTimeline?.uploaded?.createdAt | date:'d MMM YY HH:mm'}}
+
+                            </div>
+                        </div>
+
+                        <div class="skn-modal-timeline-item">
+                            <div class="skn-modal-timeline-title">SKENSE</div>
+                            <div class="skn-modal-timeline-circle skn-bg-gray"
+                                *ngIf="!documentTimeline?.skense?.color_code"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-success"
+                                *ngIf="documentTimeline?.skense?.color_code == 'success'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-warning"
+                                *ngIf="documentTimeline?.skense?.color_code == 'in_progress'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-danger"
+                                *ngIf="documentTimeline?.skense?.color_code == 'failed'"></div>
+                            <div class="skn-modal-timeline-text">
+                                {{documentTimeline?.skense?.createdAt | date:'d MMM YY HH:mm'}}
+                            </div>
+                        </div>
+
+                        <div class="skn-modal-timeline-item">
+                            <div class="skn-modal-timeline-title">Analyst</div>
+                            <div class="skn-modal-timeline-circle skn-bg-gray"
+                                *ngIf="!documentTimeline?.analyst?.color_code"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-success"
+                                *ngIf="documentTimeline?.analyst?.color_code == 'success'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-warning"
+                                *ngIf="documentTimeline?.analyst?.color_code == 'in_progress'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-danger"
+                                *ngIf="documentTimeline?.analyst?.color_code == 'failed'"></div>
+                            <div class="skn-modal-timeline-text"
+                                *ngFor="let analystDocumentLog of documentTimeline?.analyst?.logs; index as i;">
+                                {{analystDocumentLog?.pickedAt | date:'d MMM YY HH:mm'}}
+                                <span
+                                    *ngIf="analystDocumentLog?.review_time">({{analystDocumentLog?.user_id?.user_name}}
+                                    - {{convertDurationToHMSformat(analystDocumentLog?.review_time)}})</span>
+                            </div>
+                        </div>
+
+                        <div class="skn-modal-timeline-item">
+                            <div class="skn-modal-timeline-title">QC</div>
+                            <div class="skn-modal-timeline-circle skn-bg-gray"
+                                *ngIf="!documentTimeline?.qc?.color_code"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-success"
+                                *ngIf="documentTimeline?.qc?.color_code == 'success'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-warning"
+                                *ngIf="documentTimeline?.qc?.color_code == 'in_progress'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-danger"
+                                *ngIf="documentTimeline?.qc?.color_code == 'failed'"></div>
+                            <div class="skn-modal-timeline-text"
+                                *ngFor="let qcDocumentLog of documentTimeline?.qc?.logs; index as i;">
+                                {{qcDocumentLog?.pickedAt | date:'d MMM HH:mm'}}
+                                <span *ngIf="qcDocumentLog?.review_time">({{qcDocumentLog?.user_id?.user_name}} -
+                                    {{convertDurationToHMSformat(qcDocumentLog?.review_time)}})</span>
+                                <span
+                                    *ngIf="qcDocumentLog?.review_time == null && qcDocumentLog?.user_id?.user_name">({{qcDocumentLog?.user_id?.user_name}})</span>
+
+                            </div>
+                        </div>
+
+                        <div class="skn-modal-timeline-item">
+                            <div class="skn-modal-timeline-title">Completed</div>
+                            <div class="skn-modal-timeline-circle skn-bg-gray"
+                                *ngIf="!documentTimeline?.completed?.color_code"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-success"
+                                *ngIf="documentTimeline?.completed?.color_code == 'success'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-warning"
+                                *ngIf="documentTimeline?.completed?.color_code == 'in_progress'"></div>
+                            <div class="skn-modal-timeline-circle skn-bg-danger"
+                                *ngIf="documentTimeline?.completed?.color_code == 'failed'"></div>
+                            <div class="skn-modal-timeline-text" *ngIf="documentTimeline?.completed?.createdAt">
+                                {{documentTimeline?.completed?.createdAt| date:'d MMM HH:mm'}}
+                                {{documentTimeline?.completed?.status == 'pushed_to_target'? '(auto)':''}}
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- ============================================================= timeline-ends-here ========================================== -->
+
+                </div>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>

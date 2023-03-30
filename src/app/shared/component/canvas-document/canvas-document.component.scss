@@ -1,0 +1,44 @@
+.open-window-preview-wrapper {
+  height: 84.5vh !important;
+  max-width: 900px !important;
+  overflow: auto;
+  margin-top: 20px;
+  margin: 50px;
+}
+
+.open-window_canvas {
+  min-width: 55rem;
+}
+.input_bg {
+  background-color: rgb(230 237 245) !important;
+}
+.editBox_div {
+  border: solid;
+  border-width: 1px;
+  border-color: #d9dadc;
+  z-index: 99;
+  position: absolute;
+  top: 0px;
+  left: 30%;
+  padding: 5px;
+  width: 50% !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 10px #aaa !important;
+}
+
+.oldAttribute {
+  max-width: 300px;
+  overflow-wrap: break-word;
+}
+.font-weight-bold {
+  font-weight: bold !important;
+  font-size: 12px;
+}
+.extracted {
+  width: 100% !important;
+  overflow: scroll;
+}
+#editBox {
+  width: 100% !important;
+  background-color: #eff1f5 !important;
+}

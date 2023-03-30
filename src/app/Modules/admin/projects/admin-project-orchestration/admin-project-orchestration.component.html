@@ -1,0 +1,55 @@
+    <!-- ====================================================== header-ends-here ================================================ -->
+
+    <div class="skn-top-filterbar align-items-center">
+
+        <div>
+            <div class="dropdown skn-top-filterbar-item-select">
+                <div class="skn-top-filterbar-item-label">Workflow Orchestration:</div>
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" [disabled]="isDisabled"  aria-expanded="false">
+                    {{selectedProjectName}} <i class="bi bi-chevron-down ms-2"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li
+                      *ngFor="let projects of allProjects; let i = index" (click)="onProjectChange(projects)">
+                      <a class="dropdown-item">{{ projects.project_name }}</a>
+                    </li>
+                  </ul>
+            </div>
+        </div>
+        <!--=======================================================================================================================-->
+
+        <button type="button"   *ngIf="seletedStep=='1'"  class="skn-filled-btn ms-auto" (click)="next()">PROCEED TO SEQUENCE API</button>
+        <button type="button" *ngIf="seletedStep=='2'" class="skn-filled-btn ms-auto" (click)="moveToWorkflow()">PROCEED TO ORCHESTRATION WORKFLOW</button>
+        <button type="button"   *ngIf="seletedStep=='3'" class="skn-filled-btn ms-auto" (click)="submit()">SUBMIT</button>
+    </div>
+    <!-- ======================================================= filterbar-ends-here =================================================== -->
+
+    <div class="w-100 p-3">
+
+        <div class="skn-timeline">
+
+            <div class="skn-timeline-item" [ngClass]="{'skn-timeline-item-active':seletedStep=='1'}" (click)="step('1')" role="button">
+                <span (click)="step('1')">1</span>
+                Select API
+            </div>
+
+            <div class="skn-timeline-item" [ngClass]="{'skn-timeline-item-active':seletedStep=='2'}" (click)="step('2')" role="button">
+                <span (click)="step('2')">2</span>
+                Sequence API
+            </div>
+
+            <div class="skn-timeline-item" [ngClass]="{'skn-timeline-item-active':seletedStep=='3'}" (click)="step('3')" role="button">
+                <span (click)="step('3')">3</span>
+                Workflow
+            </div>
+
+        </div>
+        <!-- ============================================================= timeline-ends-here ========================================== -->
+
+    </div>
+    <!-- ========================================================================================================================== -->
+
+   <router-outlet></router-outlet>
+    
+
+    

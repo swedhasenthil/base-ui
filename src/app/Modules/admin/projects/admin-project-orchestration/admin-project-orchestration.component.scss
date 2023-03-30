@@ -1,0 +1,38 @@
+.mat-mdc-paginator{
+    display: none !important;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell{
+    border-bottom: unset !important;
+}
+.ng-star-inserted label{
+    font-size: 13px !important;
+    color: rgba(0, 0, 0, 50%) !important;
+}
+.mat-mdc-form-field{
+    position: relative;
+    left: 5px;
+}
+.mat-mdc-header-row{
+    border: 1px solid rgba(0, 0, 0, 10%);
+}
+.mat-mdc-input-element{
+    width: 60% !important;
+    height: 30px !important;
+    border: 1px solid #aaa !important;
+    border-color: #D9DADC !important;
+    border-radius: unset !important;
+    outline: unset !important;
+    position: relative;
+    left: 5px;
+}
+.mat-mdc-input-element:focus-visible{
+    height: 30px !important;
+    border: 1px solid #aaa !important;
+    border-color: #D9DADC !important;
+    border-radius: unset !important;
+    outline: unset !important;
+}
+
+button:disabled{
+    text-transform: capitalize !important;
+}

@@ -1,0 +1,207 @@
+<div class="skn-top-filterbar">
+
+    <div>
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">Project Name:</div>
+            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{selectedProjectName}} <i class="bi bi-chevron-down ms-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" >{{selectedProjectName}} </a></li>
+            </ul>
+        </div>
+    </div>
+    <!--=======================================================================================================================-->
+    <div>
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">View:</div>
+            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Rules<i class="bi bi-chevron-down ms-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/sme/rules" selected>Rules</a></li>
+              <li><a class="dropdown-item" routerLink="/sme/workflow">Workflow</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <!--=======================================================================================================================-->
+    <button type="button" class="skn-filled-btn ms-auto" data-bs-toggle="modal" data-bs-target="#addRuleModal" (click)="reset()" (click)="openModalToAddRule()">ADD NEW RULE</button>
+
+</div>
+
+<div class="skn-table-cnt allTable">
+<table class="skn-table" [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger" datatable >
+    <thead>
+        <tr>
+            <th>Rule Name</th>
+            <th>Primary Attribute</th>
+            <th>Condition</th>
+            <th>Secondary Attribute</th>
+            <th>Value</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let obj of ruleDocumentData1; index as docIndex">
+            <td title="{{obj.document_type_id.document_type +'.'+ obj.rule_name }}">
+                <div class="m-1">
+                    {{obj.document_type_id.document_type +'.'+ obj.rule_name | truncate:[10, '...']}}
+                </div>
+            </td>
+            <td>
+                <div *ngFor="let i of obj.rule_conditions; index as in" class="m-1">
+                    {{ i.primary_attribute }}
+                </div>
+            </td>
+            <td>
+                <div *ngFor="let i of obj.rule_conditions; index as in" class="m-1">
+                    {{ i.operator }}
+                </div>
+            </td>
+            <td>
+                <div *ngFor="let i of obj.rule_conditions; index as in" class="m-1">
+                    {{ i.secondary_attribute }}
+                </div>
+            </td>
+            <td>
+                <div *ngFor="let i of obj.rule_conditions; index as in" class="m-1">
+                    <p class="value_para">{{ i.value }}</p>
+                </div>
+            </td>
+            <td>
+                <div class="form-check form-switch skn-switch-green">
+                    <input class="form-check-input skn-switch-green-input" type="checkbox"  [checked]="obj?.is_active === true"
+                    (change)="onCheckboxStatusChange(docIndex, obj, $event)">
+                    <!-- <input class="form-check-input skn-switch-green-input" [checked]="obj?.is_active"  (change)="onCheckboxStatusChange(docIndex, obj, $event)" type="checkbox" role="switch"> -->
+                </div>
+                <span style="display:none;">{{obj.is_active}}</span>
+                <!-- <div class="custom-control custom-switch">
+                    <input type="checkbox" class="m-0 custom-control-input" id="{{'docstatus'+docIndex}}"
+                        [checked]="obj.is_active">
+                    <label class="custom-control-label" for="{{'docstatus'+docIndex}}"></label>
+                </div> -->
+            </td>
+                <td style="cursor: pointer;"><a data-bs-toggle="tooltip" title="Edit"  (click)="openModalToEditRule(obj)" data-bs-toggle="modal" data-bs-target="#addRuleModal" (click)="addOrEdit('Edit')"><img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon me-3"/></a>
+                    <a data-bs-toggle="tooltip" title="Delete" (click)="deleteRule(obj)" data-bs-toggle="modal"   data-bs-target="#deleteRuleModel"><img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon"/></a></td>
+
+                <!-- <span style="cursor: pointer;" matTooltip="Edit Document" (click)="openModalToEditRule(obj)"
+                    data-bs-toggle="modal" data-bs-target="#ruleModal">
+                    <img style="position: relative; top: 7px;" src="../../../assets/images/icon-edit.png" height="18">
+                </span>
+                <span style="cursor: pointer; margin-left: 18px;" matTooltip="Delete Document" (click)="setIdToDelete(obj)"
+                    data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <img style="position: relative; top: 7px;" src="../../../assets/images/icon-delete.png" height="18">
+                </span> -->
+
+        </tr>
+    </tbody>
+</table>
+
+</div>
+<div class="modal fade" id="addRuleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">{{titleName}}</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+           <app-add-edit-rule (reloadRules)="getTableList()"></app-add-edit-rule>   
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+
+                <button type="button" #closeModel class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="saveAndUpdateRule()" data-bs-dismiss="modal">Submit</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class="modal fade" id="addRule" tabindex="-1" aria-labelledby="manageAttributesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Add New Rule</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="skn-modal-field-label-2">Documnet Type</label>
+                        <select class="skn-select" [(ngModel)]="addRule.documentType" placeholder="Select" (ngModelChange)="onChangeDocTypeDropdown(addRule.documentType, $event)">
+                            <option value="">Select</option>
+                            <option *ngFor="let document of documentTypeList" [value]="document._id">{{document.document_type}}</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class="skn-modal-field-label-2">Rule Name</label>
+                        <input type="text" placeholder="Enter" [(ngModel)]="addRule.ruleName"  class="skn-input">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="skn-modal-field-label-2">Primary Attribute</label>
+                        <select class="skn-select" [(ngModel)]="addRule.primaryAttribute" placeholder="Select" (ngModelChange)="onChangePrimaryAttribute(addRule.primaryAttribute, $event)">
+                            <option value="Option 1">Select</option>
+                            <option *ngFor="let item of primaryAttributeList" [value]="item.attribute_name">{{item.attribute_name}}</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="skn-modal-field-label-2">Condition</label>
+                        <select class="skn-select" [(ngModel)]="addRule.condition" placeholder="Select">
+                            <option value="Option 1">Select</option>
+                            <option *ngFor="let item of conditions" [value]="item">{{item}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="skn-modal-field-label-2">Secondary Attribute</label>
+                        <select class="skn-select" [(ngModel)]="addRule.secondaryAtribute" placeholder="Select">
+                            <option value="Option 1">Select</option>
+                            <option *ngFor="let item of primaryAttributeList" [value]="item._id">{{item.attribute_name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="skn-modal-field-label-2">Value</label>
+                        <input type="text" placeholder="Enter" [(ngModel)]="addRule.value"  class="skn-input">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" #closeModel class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="saveRules()">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>   -->
+
+<div class="modal fade" id="deleteRuleModel"  tabindex="-1" aria-labelledby="deleteRuleModel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete '{{selectedName}}' ?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" #deleteModel class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="onDeleteRule()">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+</div>

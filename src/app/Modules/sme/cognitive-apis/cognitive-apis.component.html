@@ -1,0 +1,74 @@
+
+    <div class="skn-table-cnt listApi">
+        <table id="sknCognitiveTable" datatable [dtOptions]="dtOptions"  class="skn-table " *ngIf="modelViewList" >
+            <thead>
+                <tr>
+                    <th>Model Name &nbsp;&nbsp;</th>
+                    <th>Attributes</th>
+                    <th>Versions &nbsp;&nbsp;</th>
+                    <th>Comments &nbsp;&nbsp;</th>
+                    <th>Endpoint </th>
+                    <th>Last Updated</th>
+                    <th>Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let modelApi of modelApis" >
+                    <td>{{modelApi.name}}</td>
+                    <td>
+                        <div *ngIf="modelApi.attributes.length < 2 || modelApi.attributes.length == 2">{{modelApi.attributes.join(', ')}}</div>
+                        <div *ngIf="modelApi.attributes.length > 2" (click)="expandMoreRow(modelApi)">{{modelApi.attributes[0] + ', ' + modelApi.attributes[1] + ', ' + modelApi.attributes[2] + '...'}}
+                           <span class="view-all-span" data-bs-toggle="modal" data-bs-target="#moreRow" >{{modelApi.attributes.length -3}} more</span>
+                        </div>
+                    </td>
+                    <td>{{modelApi.versions_count}}</td>
+                    <td>{{modelApi.comments}}</td>
+                    <td>{{modelApi.endpoint}}</td>
+                    <td>{{modelApi.updated_at | date:'d MMM YY HH:mm'}}</td>
+                    <td>{{modelApi.created_at | date:'d MMM YY HH:mm'}} </td>
+                    <td style="cursor:pointer"><a data-bs-toggle="tooltip" title="Edit" (click)="routerNagivate(modelApi)"><img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon skn-action-icon me-3"/></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- ==================================================================== table-ends-here ======================================================== -->
+    
+ 
+
+    <div class="modal fade" id="moreRow" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="skn-modal-title">View Attributes</h3>
+                    <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-body modal-body-text">
+                    <table class="w-100" *ngIf="expandData">
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Model API Name </label>
+                            </td>
+                            <td class="py-3">
+                                <p class="mb-0">{{expandData.name}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-3">
+                                <label class="skn-modal-field-label-2">Attributes  </label>
+                            </td>
+                            <td class="py-3">
+                                <p class="mb-0">{{expandData.attributes.join(', ') }}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-footer">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+                <!--================================================================================================-->
+            </div>
+        </div>
+    </div>

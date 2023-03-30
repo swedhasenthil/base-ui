@@ -1,0 +1,99 @@
+<div class="d-flex">
+  <div
+    class="skn-review-preview-cnt"
+    [ngClass]="{
+      'preview-wrapper': !isNewWindow,
+      'open-window-preview-wrapper': isNewWindow
+    }"
+    (scroll)="onScroll($event)"
+  >
+    <!-- Creating canvas layers for loading images into canvas  -->
+    <!-- <canvas
+    class="canvasWidth"
+    [@rotatedState]="state"
+    *ngFor="let image of documentTotalPages; let i = index"
+    id="layer{{ i + 1 }}"
+  >  -->
+    <canvas
+      [ngClass]="{
+        canvasWidth: !isNewWindow,
+        'open-window_canvas': isNewWindow
+      }"
+      style="width: 29rem !important"
+      [@rotatedState]="state"
+      *ngFor="let _ of [].constructor(documentTotalPages); let i = index"
+      id="layer{{ i }}"
+    >
+    </canvas>
+
+    <div #editBoxDiv class="p-3 mb-5 bg-white rounded editBox_div">
+      <div>
+        <textarea
+          id="editBox"
+          [(ngModel)]="editTextBoxText"
+          row="50"
+          (ngModelChange)="editTextChange()"
+          (focusout)="editTextChangeValidation()"
+          type="textarea"
+          class="skn-input inputAtrributes"
+        ></textarea>
+        <label class="skn-modal-field-label"
+          ><span>System extracted: </span
+          ><span class="font-weight-bold">{{ oldEditText }}</span></label
+        >
+      </div>
+      <div>
+        <!-- <button  type="button" class="skn-transparent-btn d-block ms-auto" (click)="accept()">Accept</button> -->
+      </div>
+    </div>
+  </div>
+  <div class="skn-review-controlls" style="margin-left: 10px">
+    <button
+      class="skn-preview-image-options"
+      type="button"
+      placement="bottom" 
+        ngbTooltip="Rotate Clock wise"      
+      (click)="rotate()"
+    >
+      <img src="../assets/images/icon-reload.svg" />
+    </button>
+    <button
+      class="skn-preview-image-options"
+      type="button"
+      placement="bottom" 
+      ngbTooltip="Fit To width"
+      (click)="fitToScreen()"
+    >
+      <img src="../assets/images/icon-arrow-left-right.svg" />
+    </button>
+    <button
+      class="skn-preview-image-options"
+      type="button"
+      placement="bottom" 
+        ngbTooltip="Zoom in"
+      (click)="zoomIn(null)"
+    >
+      <img src="../assets/images/zoom-in.svg" />
+    </button>
+    
+    <button
+      class="skn-preview-image-options"
+      type="button"
+      placement="bottom" 
+      ngbTooltip="Zoom out"
+      (click)="zoomOut()"
+    >
+      <img src="../assets/images/zoom-out.svg" />
+    </button>
+    <button
+      *ngIf="!isNewWindow"
+      class="skn-preview-image-options"
+      type="button"
+      placement="bottom" 
+      ngbTooltip="Open preview in new window"
+      (click)="openDocInNewWindow()"
+    >
+      <img src="../assets/images/external-link.svg" />
+    </button>
+  </div>
+</div>

@@ -1,0 +1,401 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+.ng-select.custom-ng-select {
+  //   min-height: 0px;
+  //   border-radius: 0;
+  padding: 6px !important;
+}
+.ng-select.custom-ng-select .ng-select-container {
+  min-height: 0px;
+  border-radius: 0;
+  border: 0px !important;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  margin-left: -4px !important;
+}
+body {
+  padding: 0px;
+}
+.skn-header-nav .dropdown-toggle::after {
+  display: none;
+}
+#DataTables_Table_0_info {
+  display: none;
+}
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+input[type="submit"].btn-block {
+  width: 100%;
+}
+// .skn-review-components-cnt .preview-wrapper{
+// height: 84.5vh !important;width:545px!important;
+//     overflow: auto; margin-top: 20px
+// }
+.canvasWidth {
+  width: 100%;
+}
+
+.theme-green .bs-datepicker-head {
+  background-color: white !important;
+  color: black !important;
+}
+.theme-dark-blue .bs-datepicker-head {
+  background-color: white !important;
+  color: black !important;
+}
+.bs-datepicker-head button {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  height: 30px;
+  line-height: 30px;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+  color: black !important;
+  transition: 0.3s;
+}
+.left-padding {
+  display: block;
+  position: absolute;
+  will-change: transform;
+  top: 0px;
+  left: 93px !important;
+  transform: translate3d(-55px, 337px, 0px);
+}
+.theme-green .bs-datepicker-body table td span.selected {
+  background-color: #df614a !important;
+}
+.theme-green .bs-datepicker-body table td.week span {
+  color: #df614a !important;
+}
+.theme-dark-blue .bs-datepicker-body table td span.selected {
+  background-color: #df614a !important;
+}
+.theme-dark-blue .bs-datepicker-body table td.week span {
+  color: #df614a !important;
+}
+.bs-datepicker-body table th {
+  font-size: 13px;
+  color: black !important;
+  font-weight: 400;
+  text-align: center;
+}
+.bs-datepicker-body table td {
+  font-size: 13px;
+  color: black !important;
+  font-weight: 400;
+  text-align: center;
+}
+.bs-datepicker-body table td span.disabled,
+.bs-datepicker-body table td.disabled span {
+  color: black !important;
+}
+.bs-datepicker-body table.days span.in-range:not(.select-start):before {
+  background: rgba(224, 98, 74, 20%) !important;
+}
+bs-datepicker-body table td:before,
+.bs-datepicker-body table td span:before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: 6px;
+  bottom: 6px;
+  left: 2px !important;
+  right: -2px;
+  box-sizing: content-box;
+  background: transparent;
+}
+.table.dataTable thead > tr > th.sorting:after {
+  right: 0px !important;
+}
+// .dataTables_scrollBody{margin-top: -16px;}
+.dataTables_scrollHead {
+  background: #fff;
+  z-index: 99;
+}
+.boxPopup {
+  position: absolute;
+  width: 300px !important;
+  border-radius: 0 !important;
+  padding: 25px !important;
+  left: 25%;
+  bottom: 20%;
+  background-color: #ffffff !important;
+  box-shadow: 0px 0px 5px #bbbbbb;
+}
+.table-responsive {
+  overflow: scroll;
+  display: block;
+}
+.dataTables_wrapper .dataTables_info {
+  display: none;
+}
+
+.dataTables_wrapper {
+  z-index: 7;
+}
+
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+  font-size: 13px;
+}
+.sk-dropdown {
+  font-size: 13px !important;
+}
+
+.projecTable .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 42vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 75vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 46vh !important;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.workflowTable .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 26vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .workflowTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 75vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .workflowTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 46vh !important;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .workflowTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .workflowTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.projecTable .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 42vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 75vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 46vh !important;
+    width: 100% !important;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .projecTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.listApi .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 53vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .listApi .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 75vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .listApi .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 57vh !important;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .listApi .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .listApi .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.modelTable .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 53vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .modelTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 75vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .modelTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 19vh !important;
+  }
+}
+
+@media screen and (min-width: 1620px) {
+  .modelTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .modelTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.allTable .dataTables_scrollBody {
+  margin-top: -16px;
+  max-height: 42vh !important;
+}
+@media screen and (min-width: 1440px) {
+  .allTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 52vh !important;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .allTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 46vh !important;
+  }
+}
+@media screen and (min-width: 1620px) {
+  .allTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .allTable .dataTables_scrollBody {
+    margin-top: -16px;
+    max-height: 55vh !important;
+  }
+}
+.mat-mdc-slider .mdc-slider__track--active_fill {
+  border-color: red !important;
+}
+.mat-mdc-slider .mdc-slider__thumb-knob {
+  background-color: white !important;
+  border-color: white !important;
+}
+.mat-mdc-slider .mdc-slider__track--active {
+  height: 4px !important;
+  top: 0px !important;
+}
+.mat-mdc-slider .mdc-slider__tick-mark--active,
+.mat-mdc-slider .mdc-slider__tick-mark--inactive {
+  height: var(--mdc-slider-with-tick-marks-container-size, 0px) !important;
+}
+.mat-mdc-slider .mdc-slider__value-indicator::before {
+  border-top-color: black !important;
+}
+.mat-mdc-slider .mdc-slider__value-indicator {
+  background-color: black !important;
+  opacity: 1;
+}
+.mat-mdc-slider .mdc-slider__tick-mark--inactive {
+  background-color: gray !important;
+  opacity: var(--mdc-slider-with-tick-marks-inactive-container-opacity, 0.6);
+}
+.mat-mdc-slider .mdc-slider__track--inactive {
+  background-color: green !important;
+  opacity: 1 !important;
+}
+.canvasHighlight {
+  font-weight: bold !important;
+}
+.multiselect-dropdown .dropdown-btn {
+  cursor: pointer;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid var(--field-border) !important;
+  outline: none !important;
+  padding: 16.4px !important;
+  font-size: var(--fs13) !important;
+  font-weight: var(--fw400) !important;
+  color: var(--base) !important;
+  width: -webkit-fill-available !important;
+  border-radius: 0px !important;
+  background: var(--base-contrast) !important;
+}
+.mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+.mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+.mat-slider-thumb-label-text {
+  opacity: 1 !important;
+}
+.dropdown-item {
+  cursor: pointer !important;
+}
+
+button:disabled,
+button[disabled] {
+  border: 1px solid #dcdcdc !important;
+  background: #dcdcdc !important;
+  // padding: 10px 30px !important;
+  font-size: var(--fs13) !important;
+  font-weight: var(--fw600) !important;
+  color: var(--base-contrast) !important;
+  text-transform: uppercase !important;
+}
+
+button:disabled:hover {
+  background-color: #dcdcdc !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

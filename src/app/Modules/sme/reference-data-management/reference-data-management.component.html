@@ -1,0 +1,229 @@
+
+    <div class="skn-add-doctype-cnt">
+        <button type="button" class="skn-filled-btn d-block ms-auto" data-bs-toggle="modal" data-bs-target="#addReferenceDataModal">Add New Custom Data</button>
+    </div>
+    
+    <div class="skn-table-cnt allTable" *ngIf="dataList">
+        <table id="sknReferenceTable" datatable [dtOptions]="dtOptions"  class="skn-table">
+            <thead>
+                <tr>
+                    <th>Custom data Type</th>
+                    <th>Last Modified</th>
+                    <th>Data Count</th>
+                    <th>Referred in Documents</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let document of refrenceDataList;index as i">
+                    <td>{{document.reference_data_name}}</td>
+                    <td>{{document.updated_at | date:'d MMM YY HH:mm'}}</td>
+                    <td>{{document.values.length}}</td>
+                    <td><span class="skn-text-success me-2">{{document.referred_in_documents_types}}</span></td>
+                    <td>
+                        <div class="form-check form-switch skn-switch-green" >
+                            <input class="form-check-input skn-switch-green-input" type="checkbox"  [checked]="document.isActive === true"
+                           (change)="onChangeDocumentStatus($event.target, document)">
+                        </div>
+                        <span style="display: none;">{{document.isActive}}</span>
+                        <!-- <div class="form-check form-switch "  *ngIf="document.isActive === false">
+                            <input class="form-check-input " type="checkbox"  checked="document.isActive === false"
+                           (change)="onChangeDocumentStatus($event.target, document)">
+                        </div> -->
+                      
+                    </td>
+                    <td style="cursor: pointer;">
+                     <a  data-bs-toggle="tooltip" title="Duplicate" data-bs-toggle="modal" data-bs-target="#duplicateReferenceDataModal"  (click)="duplicateDocumentClick(document)" id="duplicateDC"><img src="../assets/images/copy-icon.svg" class="skn-config-edit-icon skn-action-icon me-3"/></a>
+                        <a data-bs-toggle="tooltip" title="Edit" data-bs-toggle="modal" data-bs-target="#editReferenceDataModal"  (click)="onEditDocument(document)" ><img src="../assets/images/icon-edit.svg" class="skn-config-edit-icon skn-action-icon me-3"/></a>
+                        <a data-bs-toggle="tooltip" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteReferenceDataModal"  (click)=" onDeleteDocument(document)"><img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon skn-action-icon"/></a>
+                       
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- ==================================================================== table-ends-here ======================================================== -->
+    
+    <!-- ==================================================================== Add New Reference Data Modal ==================================================================== -->
+    <div class="modal fade" id="addReferenceDataModal" tabindex="-1" aria-labelledby="addReferenceDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="skn-modal-title">Add New Custom Data</h3>
+                    <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-body p-0">
+                    <form action="" [formGroup]="addDocumentForm" autocomplete="off" method="post" accept-charset="utf-8">
+                    <div class="d-flex gap-3 mx-4 mt-3 mb-5">
+                        <div class="w-100">
+                            <label class="skn-modal-field-label-2 mb-2">Custom Data Name*</label>
+                            <input type="text" placeholder="" class="skn-input" formControlName="document_type" required>
+                        </div>
+                    </div>
+                    </form>
+                    <!--===========================================================================================-->
+                    <div class="skn-modal-table-cnt">
+                        <table class="skn-modal-table">
+                            <thead>
+                                <tr>
+                                    <th class="skn-modal-field-label-2">Key</th>
+                                    <th class="skn-modal-field-label-2">Values</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of attributesArray ;let i = index;let lastIndex=last">
+                                    <td>
+                                        <input type="text" class="skn-input" name="key"  [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.key" placeholder="key">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="skn-input" name="value"  [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.value" placeholder="value">
+                                    </td>
+                                    <td class="cursor-pointer">
+                                            <a  data-bs-toggle="tooltip" data-bs-placement="bottom" *ngIf="!lastIndex"  data-bs-title="Delete" (click)="removeAttributeRow(i)"><img src="../assets/images/icon-trash.svg" (click)="removeAttributeRow(i)" class="skn-config-edit-icon skn-action-icon me-3"></a>
+
+                                            <a  data-bs-toggle="tooltip" data-bs-placement="bottom" *ngIf="lastIndex" data-bs-title="Add" (click)="addAttributeRow()"><img src="../assets/images/zoom-in.svg" class="skn-config-edit-icon skn-action-icon"></a>
+
+                                            <!-- <a><img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon skn-action-icon " (click)="removeAttributeRow(i)"/></a> -->
+
+                                        <!-- <button type="button" class="skn-outline-btn" >ADD NEW ROW</button> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--===========================================================================================-->
+                </div>
+                <!--===============================================================================================-->
+                <div class="modal-footer">
+                    <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal"  (click)="resetDocument()">CANCEL</button>
+                    <button type="button" [ngClass]="{'skn-filled-btn' : addDocumentForm.valid ,'skn-outline-btn': !addDocumentForm.valid}" (click)="onAddDocumentSubmit()" data-bs-dismiss="modal" [disabled]="!addDocumentForm.valid">SUBMIT</button>
+                </div>
+                <!--===============================================================================================-->
+            </div>
+        </div>
+    </div>
+    <!-- ==================================================================== Add New Reference Data Modal Ends Here ==================================================================== -->
+        
+<!-- ============================================================= Duplicate Reference Data Modal ============================================================================ -->
+<div class="modal fade" id="duplicateReferenceDataModal" tabindex="-1" aria-labelledby="duplicateReferenceDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Duplicate Custom Data</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+                <div class="d-flex gap-3 mx-4 mt-3 mb-5">
+                    <div class="w-100">
+                        <label class="skn-modal-field-label-2 mb-2">Custom Data Name*</label>
+                        <input type="text" placeholder="Duplicate Document Name" class="skn-input" [(ngModel)]="duplicateDocumentName" required>
+                    </div>
+                </div>
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn" (click)="duplicateDocumentSubmit()" data-bs-dismiss="modal">SUBMIT</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+<!-- ============================================================= Duplicate Reference Data Modal End Here ============================================================================ -->
+
+
+<!-- ============================================================= edit Reference Data Modal start ============================================================================ -->
+
+<div class="modal fade" id="editReferenceDataModal" tabindex="-1" aria-labelledby="editReferenceDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Edit Custom Data</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body p-0">
+                <form action="" [formGroup]="editDocumentForm" autocomplete="off" method="post" accept-charset="utf-8">
+                <div class="d-flex gap-3 mx-4 mt-3 mb-5">
+                    <div class="w-100">
+                        <label class="skn-modal-field-label-2 mb-2">Custom Data Name*</label>
+                        <input type="text" placeholder="" class="skn-input" formControlName="editDocumentName" required>
+                    </div>
+                </div>
+                </form>
+                <!--===========================================================================================-->
+                <div class="skn-modal-table-cnt">
+                    <table class="skn-modal-table">
+                        <thead>
+                            <tr>
+                                <th class="skn-modal-field-label-2">Key</th>
+                                <th class="skn-modal-field-label-2">Values</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let attributeData of clickedAttributesData; let i = index; let lastIndex=last">
+                                <td>
+                                    <input type="text" class="skn-input" name="key"  [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="attributeData.key" placeholder="key">
+                                </td>
+                                <td>
+                                    <input type="text" class="skn-input" name="value"  [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="attributeData.value" placeholder="value">
+                                </td>
+                                <td>
+                                    <a  data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Delete" *ngIf="!lastIndex" (click)="removeAttributeRow(i)"><img src="../assets/images/icon-trash.svg" (click)="editRemoveAttributeRow(i)" class="skn-config-edit-icon skn-action-icon me-3"></a>
+
+                                    <a  data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Add"  *ngIf="lastIndex" (click)="addAttributeRowOfEdit()"><img src="../assets/images/zoom-in.svg" class="skn-config-edit-icon skn-action-icon"></a>
+                                </td>
+                            </tr>
+                            <!-- <tr>
+                                <td>
+                                    <button type="button" class="skn-outline-btn" (click)="addAttributeRowOfEdit()">ADD NEW ROW</button>
+                                </td>
+                                <td></td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+                <!--===========================================================================================-->
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" (click)="resetRowOfEdit()">CANCEL</button>
+                <button type="button" [ngClass]="{'skn-filled-btn' : editDocumentForm.valid ,'skn-outline-btn': !editDocumentForm.valid}" (click)="onClickEditDocument()" data-bs-dismiss="modal" [disabled]="!editDocumentForm.valid">SUBMIT</button>
+            </div>
+            <!--===============================================================================================-->
+        </div>
+    </div>
+</div>
+
+
+<!-- ============================================================= Delete Reference Data Modal ============================================================================ -->
+<div class="modal fade" id="deleteReferenceDataModal" tabindex="-1" aria-labelledby="deleteReferenceDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="skn-modal-title">Are you sure you want to delete {{deleteDocumentName}}?</h3>
+                <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-body">
+            </div>
+            <!--===============================================================================================-->
+            <div class="modal-footer border-0">
+                <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                <button type="button" class="skn-filled-btn"  (click)="deleteDocument()" data-bs-dismiss="modal">CONFIRM DELETE</button>
+            </div>
+            <!--================================================================================================-->
+        </div>
+    </div>
+  
+</div>
+
+<!-- ============================================================= Delete Reference Data Modal End Here ============================================================================ -->

@@ -1,0 +1,74 @@
+<div class=" modal fade" id="rulesId" data-backdrop="static" tabindex="-1" role="dialog"
+  aria-labelledby="manageAttributesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h3 class="skn-modal-title">Manage Attributes - Set Rules</h3>
+        <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal"
+          aria-label="Close" />
+      </div>
+      <div class="modal-body">
+
+        <div id="set-rules">
+          <!-- <h4 class="mb-2">Set Rules</h4> -->
+          <div autocomplete="off" method="post" accept-charset="utf-8">
+
+            <table id="documentRulesTable" class="skn-table" style="font-size: 12px;">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Attributes</th>
+                  <th scope="col">Data Type<span class="text-danger">*</span></th>
+                  <th scope="col">&nbsp;Threshold (%)</th>
+                  <th scope="col">Length</th>
+                  <th scope="col">Lower Limit</th>
+                  <th scope="col">Upper Limit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dataItem of selectedAttibutes;let i = index;">
+                  <td>{{dataItem.attribute_name}}</td>
+                  <td>
+                    <span>{{dataItem.data_type|titlecase}}</span>
+                  </td>
+                  <td>
+                    <div style="width: 133px">
+                    <span  class="tooltiptext" [ngStyle]="setMyStyles(selectedAttibutes[i].threshold)" >{{selectedAttibutes[i]?.threshold}}</span>
+                    <input type="range" id="myinput" style=" background: linear-gradient(to right, red 0%, red {{selectedAttibutes[i].threshold}}%, green {{selectedAttibutes[i].threshold}}%, green); "
+                    [(value)]="selectedAttibutes[i].threshold"
+                    [(ngModel)]="selectedAttibutes[i].threshold" 
+                    (ngModelChange)="updateTooltip(i)" 
+                    [min]="0" 
+                    [max]="100">
+                  </div>
+                  </td>
+                  <td><input class="skn-input skn-attribute-params w-50px" style="height: 0px;padding:15px !important"
+                      id="{{'lengthtype'+ i}}" type="number" [(ngModel)]="selectedAttibutes[i].length"></td>
+                  <td><input class="skn-input skn-attribute-params  w-50px" style="height: 0px;padding:15px !important"
+                      id="{{'lowerlimit'+ i}}" type="text" [(ngModel)]="selectedAttibutes[i].upper_limit"></td>
+                  <td><input class="skn-input skn-attribute-params  w-50px" style="height: 0px;padding:15px !important"
+                      id="{{'upperlimit'+ i}}" type="text" [(ngModel)]="selectedAttibutes[i].lower_limit"></td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#manageAttributesModal">
+          << Back to Attributes List</button>
+            <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+
+            <button type="button" class="skn-filled-btn" aria-label="Close" data-bs-toggle="modal"
+              data-bs-target="#rulesId" data-bs-dismiss="modal" (click)="onSubmit()"
+              *ngIf="submitButton === true">Submit</button>
+
+            <button type="button" class="skn-filled-btn" (click)="updateDocument()" data-dismiss="modal"
+              *ngIf="updateButton == true" data-bs-dismiss="modal">Update</button>
+
+      </div>
+    </div>
+  </div>
+</div>

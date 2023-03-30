@@ -1,0 +1,61 @@
+.w-50px{
+    width: 50px !important;
+}
+  
+.tooltiptext {
+  width: 4%;
+  font-size: 14px;
+  background-color: black;
+  color: #fff;
+  height: 30px;
+  text-align: -webkit-center;
+  border-radius: 4px;
+  padding-top:5px;
+  /* margin-right: 20px; */
+  margin-top: -30px;
+  position: absolute;
+  /* display: table; */
+  z-index: 1;
+}
+
+
+  .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+  .tooltips:hover .tooltiptext {
+    visibility: visible;
+  }
+  #myinput {
+    border-radius: 8px;
+    height: 4px;
+    width: 90%;
+    display: inline-block;
+    outline: none;
+    transition: background 450ms ease-in;
+    -webkit-appearance: none;
+  }
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+  #myinput::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    border-radius: 8px;
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    background: white; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+  
+  #myinput::-moz-range-thumb {
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    border-radius: 8px;
+    background: white; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }

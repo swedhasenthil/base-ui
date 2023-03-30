@@ -1,0 +1,101 @@
+
+    <div class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+        <div class="container p-3 login-width">
+            <div class="login-card">
+                <div class="row no-gutters">
+                    <div class="col-md-8 col-6">
+                        <div class="sk-bar p-3">
+                            <img src="../assets/images/skense-logo-white.png">                 
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6 bg-white">
+                        <div class="brand-wrapper c-logo text-right p-2">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-lg-8 d-none d-lg-block">
+                        <div class="login-banner-bg"></div>
+                    </div>
+                    <div class="col-lg-4 col-12 p-0">
+                        <div class="login-form">
+                            <div class="p-4">
+                                <h3 class="login-card-description pt-3 pb-3">Sign in to your acount</h3>
+                                <form [formGroup]="formLogin" (ngSubmit)="login()">
+                                    <div *ngIf="isInvalidUser" class="alert alert-danger">Invalid User</div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email"   class="form-control" formControlName="userName" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.userName.errors}">
+                                       <div *ngIf="submited && f.userName.errors">
+                                        <div *ngIf="f.userName.errors?.required" class="alert alert-danger">User Name is Required</div>
+                                       </div>
+                                        
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="password" >Password</label>
+                                        <input type="password"  class="form-control" formControlName="password" placeholder="Enter" [ngClass]="{'is-invalid':submited && f.password.errors}">
+                                        <div *ngIf="submited && f.userName.errors">
+                                        <div *ngIf="f.password.errors?.required" class="alert alert-danger">Password is Required</div>
+                                    </div>
+                                    </div>
+                                    <!-- <div class="alert alert-danger">Email or Password entered is wrong</div> -->
+                                    <input type="submit" class="btn btn-block login-btn mb-4 btn-primary btn-sm" value="SIGN IN">
+                                    
+                                </form>
+                                <p class="login-card-footer-text">Forgot password? <a routerLink="forgot-password">Reset Now</a></p>
+                                <p class="login-card-footer-text">New User? <a routerLink="signup"> Signup Now</a></p> 
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-md-8 col-6">
+                        <div class="copyrights p-3">© 2022 WNS.</div>
+                    </div>
+                    <div class="col-md-4 col-6 bg-white">                                          
+                        <div class="brand-wrapper w-logo p-2">
+                            <i></i>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!-- <div class="container">
+    <form>
+     <div class="row justify-content-center">
+       <div class="card shadow-sm">
+
+        <div class="rwo">
+            <h2 class="text-center">Login</h2>
+        </div>
+           <div class="row">
+                <div class="col-md-12">
+                    <label>User Name</label>
+                    <input type="text" class="form-control" placeholder="Enetr">
+                </div>
+                <div class="col-md-12">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Enetr">
+                    <a class="text-primary pt-5" routerLink="forgot-password">Forgot password ?</a>
+                </div>
+           </div>
+
+           <div class="row">
+              <div class="col-md-12 mt-2">
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+              </div>
+              <div class="row mt-4">
+                <div class="d-flex justify-content-center">
+                <label>Not a member ?</label> <a class="text-primary mx-2" routerLink="signup">Signup now</a>
+                </div>
+              </div>
+           </div>
+       </div>
+     </div>
+    </form>
+</div> -->

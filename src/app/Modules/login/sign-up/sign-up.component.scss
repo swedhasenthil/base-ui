@@ -1,0 +1,53 @@
+img {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .page {
+    height: 100%;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .container {
+    background-color: #ffffff;
+    width: 100%;
+    align-self: center;
+    padding: 0px;
+  }
+  
+  .col-md-6 {
+    padding: 0px;
+  }
+  
+  .col-signup-form {
+    float: none;
+    overflow-y: scroll;
+    height: 620px;
+  }
+  
+  .sign-up-form {
+    margin-top: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 11%;
+    padding-right: 12%;
+  }
+  
+  .existing-user {
+    text-align: right;
+    padding-right: 0.5rem;
+  }
+  
+  .sign-up {
+    padding-left: 5px;
+  }
+  
+  #submit-button {
+    text-align: center;
+  }
+  
+  #reset-form {
+    padding-right: 1rem;
+  }

@@ -1,0 +1,129 @@
+<div class="skn-performance-cnt">
+    <div class="skn-progress-cnt">
+        <div class="skn-progress-label">Group Performance</div>
+        <div class="progress skn-progress">
+            <div class="progress-bar skn-progress-bar" role="progressbar" *ngIf="groupPerformances"  [style.width.%]="groupPerformances.percentage"
+            aria-valuenow="groupPerformances.percentage" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div *ngIf="groupPerformances" class="skn-progress-text">{{groupPerformances.percentage | number}} %</div>
+    </div>
+    <!-- ============================================================= -->
+
+    <div class="skn-my-performance-title" *ngIf="router.url=='/analyst/reports'">My Performance</div>
+</div>
+
+<div class="skn-sub-performance-cnt">
+
+    <div class="skn-sub-progress-cnt">
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Total Docs</div>
+            <div class="skn-performance-data-text" *ngIf="groupPerformances">{{groupPerformances.total_documents}}</div>
+        </div>
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Reviewed Docs</div>
+            <div class="skn-performance-data-text" *ngIf="groupPerformances">{{groupPerformances.reviewed}}</div>
+        </div>
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Rejected Docs</div>
+            <div class="skn-performance-data-text" *ngIf="groupPerformances">{{groupPerformances.rejected}}</div>
+        </div>
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Pending Docs</div>
+            <div class="skn-performance-data-text" *ngIf="groupPerformances">{{groupPerformances.pending}}</div>
+        </div>
+    </div>
+    <!-- ============================================================================= -->
+
+    <div class="skn-my-performance-cnt" *ngIf="router.url=='/analyst/reports'">
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Reviewed Docs</div>
+            <div class="skn-performance-data-text">{{individualPerformance.reviewed}}</div>
+        </div>
+        <div class="skn-performance-data">
+            <div class="skn-performance-data-label">Rejected Docs</div>
+            <div class="skn-performance-data-text">{{individualPerformance.rejected}}</div>
+        </div>
+    </div>
+    <!-- ============================================================================= -->
+
+</div>
+
+<div class="skn-reports-view-filterbar">
+
+    <div class="dropdown skn-top-filterbar-item-select">
+       
+        <div class="skn-top-filterbar-item-label">Project</div>
+        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{selectedProjectName}} <i class="bi bi-chevron-down ms-2"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li *ngFor="let projects of getAllProjects; let i = index" (click)="onProjectChange(projects)"><a class="dropdown-item"  >{{ projects.projectName}}</a></li>
+        </ul>
+        <!-- <ul class="dropdown-menu">
+        <li><a class="dropdown-item">Demo Project</a></li>
+        </ul> -->
+    </div>
+
+    <div class="dropdown skn-top-filterbar-item-select" style="margin-left: 48px;">
+        <div class="skn-top-filterbar-item-label">Date</div>
+       
+        <input type="text"  placeholder="Daterangepicker" class="skn-input" bsDaterangepicker [datesDisabled]="disabledDates"
+     [minDate]="minDate" [maxDate]="maxDate" [(ngModel)]="bsRangeValue" [bsConfig]="{ isAnimated: true }" (change)="onTimePeriodChange()">
+    </div>
+
+</div>
+
+<div class="skn-reports-view-downloads">
+
+    <div class="skn-download-dropdown-cnt">
+        <div class="dropdown skn-dropdown">
+            <button class="btn dropdown-toggle skn-input" type="button" data-bs-toggle="dropdown" aria-expanded="false">Document<img src="../../../assets/images/download-circle.svg" class="ms-2" /></button>
+          
+            <ul class="dropdown-menu">
+                <li  *ngFor="let report of reports"><a class="dropdown-item" (click)="download(report); report.download=true;">{{report.name}}</a>
+               
+                </li>
+            
+                <!-- <mat-progress-bar class="mt-2" *ngIf="download$ | async as download"
+                [mode]="download.state === 'PENDING' ? 'buffer' : 'determinate'" [value]="download.progress"
+                [color]="download.state === 'FAILED' ? 'warn' : 'primary'">
+              </mat-progress-bar>  -->
+              
+            </ul>
+        </div>
+    </div>
+
+    <div class="skn-download-dropdown-cnt">
+        <div class="dropdown skn-dropdown">
+            <button class="btn dropdown-toggle skn-input" type="button" data-bs-toggle="dropdown" aria-expanded="false">Final Output<img src="../../../assets/images/download-circle.svg" class="ms-2"/></button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let report of  finalReports"><a class="dropdown-item" (click)="download(report); report.download=true;">Final Output</a>
+                   
+                 </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="skn-download-dropdown-cnt">
+        <div class="dropdown skn-dropdown">
+            <button class="btn dropdown-toggle skn-input" type="button" data-bs-toggle="dropdown" aria-expanded="false">Final Report<img src="../../../assets/images/download-circle.svg" class="ms-2"/></button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let report of finalOpReports"><a class="dropdown-item" (click)="download(report)">{{report.name}}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="skn-download-dropdown-cnt">
+        <div class="dropdown skn-dropdown">
+            <button class="btn dropdown-toggle skn-input" type="button" data-bs-toggle="dropdown" aria-expanded="false">Documents<img src="../../../assets/images/download-circle.svg" class="ms-2"/></button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let report of documentReports"><a class="dropdown-item" (click)="download(report)">{{report.name}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <mat-progress-bar class="mt-2" *ngIf="download$ | async as download"
+    [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'" [value]="download.progress"
+    [color]="download.state == 'FAILED' ? 'warn' : 'primary'">
+  </mat-progress-bar>
+
+</div>

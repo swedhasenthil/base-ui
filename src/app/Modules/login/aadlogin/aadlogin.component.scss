@@ -1,0 +1,122 @@
+
+/* NEw Login Page CSS */
+.login {
+    background-color: #f5f5f5 !important;
+    color: #777 !important;
+    font-size: .85rem;font-family: 'Roboto', sans-serif;
+  }
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+.skn-login-body {
+    background: transparent url("/assets/images/page-bg.png") no-repeat;
+    background-size: cover;
+}
+.login-width{max-width: 1020px;}
+
+.login-banner-bg {
+    display: block;
+    background: url("/assets/images/skn-login-hero.png") no-repeat left bottom;
+    /* background-size: cover; */
+}
+.login-banner img{width:100%}
+.login-form {
+    height: 100%;
+    padding: 1rem;
+    margin-right: 0.7rem;
+    height: 440px;
+}
+.login-wrapper {
+    background-color: rgba(255,255,255,0.5);
+}
+h3.login-card-description {
+    font-size: 24px;
+    font-weight: 300;
+    color: #000;
+}
+.brand-wrapper.c-logo {
+    font-size: 16px;
+    color: #000;
+}
+.brand-wrapper.c-logo i {
+    display: inline-block;
+    width: 100px;
+    height: 36px;
+    // background: url("/assets/images/MetroLogoBlue.png") no-repeat right center;
+    background-size: contain;
+}
+.brand-wrapper.w-logo i {
+    display: inline-block;
+    width: 50px;
+    height: 18px;
+    background: url("/assets/images/wns-logo.png") no-repeat right center;
+    background-size: contain;
+}
+.login-form .form-control {
+    color: #777;
+    font-size: 12px;
+    border-radius: 0;
+}
+.text-white {
+    color: #fff;
+}
+.login-form .login-btn{border-radius: 0;}
+p.login-card-footer-text {
+    text-align: center;font-size:12px;
+}
+
+.sk-bar img {
+    max-width: 100%;
+    width: auto;
+}
+.copyrights {
+    height: 45px;
+    font-size: 9px;
+    color: #fff;
+}
+.login-form .alert {
+    font-size: 11px;
+    padding: .25rem .5rem;
+    margin-bottom: .75rem;
+}
+@media(max-width:768px){
+.card-body.p-5 {
+    padding: 20px!important;
+}
+h3.login-card-description {
+    font-size: 21px;
+}
+.brand-wrapper {
+    background-color: #312872;
+    border-bottom: 2px solid #312872;
+}
+.brand-wrapper.c-logo i {
+    // background: url("/assets/images/MetroLogoWhite.png") no-repeat center center;
+    background-size: contain;
+}
+.brand-wrapper.w-logo {
+    background: #2a0a77;
+    border-top: 4px solid #2a0a77;
+}
+.brand-wrapper.w-logo i {
+    background: url("/assets/images/wns-logo-white.png") no-repeat right center;
+    background-size: contain;
+}	
+}
+.new-user {
+    padding-right: 0.5rem;
+  }
+  
+  .sign-up {
+    text-align: right;
+    padding-right: 1rem;
+  }
+
+h5.login-card-info {
+    font-size: 12px;
+    font-weight: 300;
+    color: #000;
+}

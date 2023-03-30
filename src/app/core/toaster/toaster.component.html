@@ -1,0 +1,75 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div *ngFor="let toast of toasts; index as i">
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-info25 skn-info-stroke25" role="alert" *ngIf="toast.type === 'info'">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-info-square-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                {{toast.message}}
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-warning25 skn-warning-stroke25" role="alert" *ngIf="toast.type === 'warning'">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-exclamation-triangle-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                {{toast.message}}
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-success25 skn-success-stroke25" role="alert" *ngIf="toast.type === 'success'">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-check-circle-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                {{toast.message}}
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-error25 skn-error-stroke25" role="alert" *ngIf="toast.type === 'error'">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-exclamation-octagon-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                {{toast.message}}
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+  </div>
+  
+   
+    <!-- <pre>toasts: {{ toasts | json }}</pre> -->
+    <!-- <div class="toast show align-items-center rounded-0 shadow-none skn-bg-warning25 skn-warning-stroke25" role="alert" >
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-exclamation-triangle-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                This is a warning toaster.
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-success25 skn-success-stroke25" role="alert">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-check-circle-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                This is a Success toaster
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+
+    <div class="toast show align-items-center rounded-0 shadow-none skn-bg-error25 skn-error-stroke25" role="alert">
+        <div class="d-flex align-items-center">
+            <img src="../assets/images/icon-toast-exclamation-octagon-fill.svg" class="p-3"/>
+            <div class="toast-body px-0 py-3">
+                This is an error toaster. This toaster has got a lengthy text that spans multiple lines.
+            </div>
+            <button type="button" class="btn-close ms-auto p-3" data-bs-dismiss="toast"></button>
+        </div>
+    </div> -->
+
+</div>

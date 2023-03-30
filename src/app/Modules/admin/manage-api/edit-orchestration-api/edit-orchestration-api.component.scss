@@ -1,0 +1,33 @@
+// .modal-dialog-centered {
+//     display: flow-root;
+//     align-items: center;
+//     min-height: calc(100% - var(--bs-modal-margin) * 2);
+// }
+.dataTables_scrollBody {
+    margin-top: -16px;
+    max-height:40vh !important
+}
+@media screen and (min-width: 1440px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:75vh !important
+    }
+}
+@media screen and (min-width: 1366px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:46vh !important
+    }
+}
+@media screen and (min-width: 1620px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}
+@media screen and (min-width: 1920px) {
+    .dataTables_scrollBody {
+        margin-top: -16px;
+        max-height:55vh !important
+    }
+}

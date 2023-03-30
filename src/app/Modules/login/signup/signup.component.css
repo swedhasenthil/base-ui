@@ -1,0 +1,7 @@
+::ng-deep .p-calendar-w-btn .p-inputtext {
+    height: 40px;
+}
+
+::ng-deep .p-button.p-button-icon-only{
+    height: 40px;
+}

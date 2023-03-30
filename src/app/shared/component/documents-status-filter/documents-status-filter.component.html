@@ -1,0 +1,21 @@
+<div>
+  <div class="dropdown skn-top-filterbar-item-select">
+    <div class="skn-top-filterbar-item-label">Filter by status:</div>
+    <button
+      class="btn dropdown-toggle"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      id="status-filter"
+    >
+      {{ selectedStatus }} <i class="bi bi-chevron-down ms-2"></i>
+    </button>
+    <ul class="dropdown-menu">
+      <li
+        *ngFor="let documentStatus of _listOfDocumentStatus; let i = index">
+        <a class="dropdown-item"
+        (click)="selectDocumentStatus(documentStatus)">{{ documentStatus?.name }}</a>
+      </li>
+    </ul>
+  </div>
+</div>

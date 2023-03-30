@@ -1,0 +1,86 @@
+
+
+
+    <div class="skn-table-cnt listApi">
+        <table id="sknCalibrateTraining" datatable class="skn-table" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+                <tr>
+                    <th>Document ID</th>
+                    <th>File Name</th>
+                    <th>Assignee</th>
+                    <th>Created Date</th>
+                    <th>Last Updated Date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                    <tr class="row-item-pending" role="row" *ngFor="let document of uploadDocumentListData" >
+                        <td>{{document._id}}</td>
+                        <td>{{document.file_name}}</td>
+                        <td>{{document.assignee?.user_name}}</td>
+                        <td>{{document.created_at | date:'d MMM YY HH:mm'}}</td>
+                        <td>{{document.updated_at | date:'d MMM YY HH:mm'}} </td>
+                        <td>
+                          {{ document.status }}
+                          <a *ngIf="document.status == 'Rejected'" class="doc-review-comment"
+                          >
+                            <img src="../../../assets/images/comment-white.png" height="20" alt="">
+                          </a>
+                          <ng-template #reviewComment>
+                            <div>
+                              {{document.review_comment ? document.review_comment : "Comment unavailable"}}
+                            </div>
+                          </ng-template>
+                        </td>
+                        <td style="cursor: pointer;">
+                          <!-- <label *ngIf="document.status == 'Failed'" type="button" class="ml-2" >
+                            <img class="upload-icon" src="../../../assets/images/upload-white.svg">
+                            <input type="file" accept=".pdf,.png" multiple="false" class="icon-display"   #fileInputTd  value="" />
+                         </label> -->
+                           <!-- <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Pending Approval' " height="20" class="img-cursor" >
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Pending Annotate' && document.assignee?.user_name == null" height="20"
+                            class="img-cursor">
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Rejected'  && document.assignee._id != loginUser " height="20" class="img-cursor icon-opacity">
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Rejected'  && document.assignee._id == loginUser" height="20" class="img-cursor" >
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Approved' " height="20" class="img-cursor" >
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Uploaded' " height="20" class="icon-opacity" disabled >
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'Failed' " height="20" class="img-cursor icon-display">
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'In progress'  && document.assignee._id != loginUser" height="20" class="img-cursor icon-opacity">
+                           <img src="../../../assets/images/icon-play.png" *ngIf="document.status == 'In progress'  && document.assignee._id == loginUser" height="20" class="img-cursor"
+                           >
+                           <span  class="ml-2" data-bs-toggle="modal"   data-bs-target="#deleteDocRowModal">
+                            <img style="cursor: pointer;" src="../../../assets/images/icon-delete.png" height="15">
+                          </span> -->
+                          <a data-bs-toggle="tooltip" title="Play" ><img src="../assets/images/icon-play.svg" class="skn-config-edit-icon me-3"/></a>
+                           <a data-bs-toggle="modal" (click)="onDeleteDocumentIconClick(document)" data-toggle="tooltip" title="Delete"  data-bs-target="#deleteDocuemnt"><img src="../assets/images/icon-trash.svg" class="skn-config-edit-icon"/></a>
+                        </td>
+                      </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <!-- ==================================================================== table-ends-here ======================================================== -->
+
+    <div class="modal fade" id="deleteDocuemnt"  tabindex="-1" aria-labelledby="deleteDocuemnt" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h3 class="skn-modal-title">Are you sure you want to delete?</h3>
+                  <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+              </div>
+              <!--===============================================================================================-->
+              <div class="modal-body">
+              </div>
+              <!--===============================================================================================-->
+              <div class="modal-footer border-0">
+                  <button type="button" #deleteDocumentbtn class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+                  <button type="button" class="skn-filled-btn" (click)="onDeleteButtonClick()">CONFIRM DELETE</button>
+              </div>
+              <!--================================================================================================-->
+          </div>
+      </div>
+  </div>
+
+

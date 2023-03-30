@@ -1,0 +1,229 @@
+
+<div class="skn-top-filterbar align-items-center">
+
+    <div>
+        <div class="dropdown skn-top-filterbar-item-select">
+            <div class="skn-top-filterbar-item-label">Filter by project:</div>
+            <button class="btn dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                {{selectedProjectName}} <i class="bi bi-chevron-down ms-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let projects of getAllProjects; let i = index" (click) ="onProjectChange(projects)"><a class="dropdown-item">{{projects.projectName}}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!--=======================================================================================================================-->
+        <div *ngIf="!getTaskFlag">
+            <div class="dropdown skn-top-filterbar-item-select">
+                <div class="skn-top-filterbar-item-label">Filter by status:</div>
+                <button class="btn dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+                    {{displaySelect}} <i class="bi bi-chevron-down ms-2"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li (click) ="filterStatus('All')"><a class="dropdown-item">All</a></li>
+                    <li *ngFor="let item of statusFilter; let i = index" (click) ="filterStatus(item.status)"><a class="dropdown-item">{{item.name}}</a></li>
+                </ul>
+                
+            </div>
+        </div>
+    <!--=======================================================================================================================-->
+    <a class="ms-auto skn-top-filterbar-refresh" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Refresh" (click)="refreshTable()"><img src="../assets/images/icon-refresh.svg"></a>
+
+    <button type="button" class="skn-filled-btn" id="liveToastBtn" (click)="unlockThisProjectDocs()">UNLOCK DOCUMENTS</button>
+
+</div>
+<!-- ======================================================= filterbar-ends-here =================================================== -->
+
+<div class="skn-table-cnt allTable" >
+    <table id="myTable"  datatable [dtOptions]="dtOptions"  class="skn-table" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>Document ID</th>
+                <th>Contract Name</th>
+                <th>Assignee</th>
+                <th>Created Date</th>
+                <th>Last Updated</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let document of primaryTaskTable;">
+                <td>{{document._id}}</td>
+                <td title="{{document.document_name}}">{{document.document_name | truncate:[20, '...']}}</td>
+                <td>{{document.user_id == null ? 'NA': document.user_id.user_name}}</td>
+                <td>{{document.uploaded_timestamp | date:'d MMM YY HH:mm'}}</td>
+                <td>{{document.last_modified_timestamp | date:'d MMM YY HH:mm'}}	</td>
+                <td>
+                    <span *ngIf="docStatusMetaData[document.document_status]; else displayStatus">{{docStatusMetaData[document.document_status].display_name}}</span>
+                    <ng-template #displayStatus>{{document.document_status}}</ng-template>
+                </td>
+                <td style="cursor: pointer;width: 100px;">
+                    <a href="#dtModal" data-bs-toggle="modal" (click)="getDocumentTimeline(document,'i')"><img src="../assets/images/skn-manager-doc-timeline.svg" class="skn-config-edit-icon skn-action-icon me-3" data-bs-toggle="tooltip" title="Document Timeline"/></a>
+                    <a href="#ReassignUserModal" data-bs-toggle="modal" (click)="configureAssignmentLookup(document, 'i')"> <img src="../assets/images/skn-manager-assign.svg" class="skn-config-edit-icon skn-action-icon" data-bs-toggle="tooltip" title="Assign Task"/></a>
+                </td> 
+            </tr>
+      
+        </tbody>
+    </table>
+</div>
+<!-- ==================================================================== table-ends-here ======================================================== -->
+
+
+
+<!-- Reassign User Modal -->
+<div class="modal fade" id="ReassignUserModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="skn-modal-title">{{actionTitle}}</h3>
+            <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close" (click)="reset()">
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-body">
+
+            <table class="w-100">
+              
+                <tr>
+              
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">Role*</label>
+                    </td>
+                    <td class="py-3">
+                        <select class="skn-select" (change)="fetchUserForThisRoleForAProject($event)" [(ngModel)]="selectedRoleId">
+                            <option value="" [disabled]="true">Select a role</option>
+                            <option *ngFor="let role of roles"   [value]="role._id">{{role.role_name}}</option>
+                        </select>
+                        
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3">
+                        <label class="skn-modal-field-label-2">User*</label>
+                    </td>
+                    <td class="py-3">
+                        <select class="skn-select" [(ngModel)]="selectedUserId">
+                            <option value="" [disabled]="true">Select a user</option>
+                            <option *ngFor="let assignee of assignees" [value]="assignee._id">{{assignee.user_name}}</option>
+                    </select>
+                        <!-- <select class="skn-select">
+                            <option value="Option 1">Option 1</option>
+                            <option value="Option 2">Option 2</option>
+                        </select> -->
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="py-3" colspan="2" *ngIf="isDocLocked">
+                        <div class="skn-check">
+                            <input class="form-check-input skn-check-input" type="checkbox" id="check-box-0311221129" [(ngModel)]="selectedForce">
+                            <label class="skn-check-label" for="check-box-0311221129">
+                               &nbsp;&nbsp; Existing user is reviewing the document now, override & assign.
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+         
+            </table>
+
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-footer">
+            <button type="button" class="skn-transparent-btn" data-bs-dismiss="modal">CANCEL</button>
+            <button type="button" class="skn-filled-btn" (click)="assignOrReassign()" data-bs-dismiss="modal" (click)="reset()" [disabled]="selectedRoleId=='' || selectedUserId==''" >{{actionButtonLabel}}</button>
+        </div>
+        <!--===============================================================================================-->
+    </div>
+</div>
+</div>
+<!--=======================================================================================================-->
+
+<!-- Document Timeline Modal -->
+<div class="modal fade" id="dtModal" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="skn-modal-title">Document Timeline</h3>
+            <img src="../assets/images/icon-close.svg" class="ms-auto modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+        </div>
+        <!--===============================================================================================-->
+        <div class="modal-body">
+            <div class="w-100 p-3">
+
+                <div class="skn-modal-timeline">
+        
+                    <div class="skn-modal-timeline-item">
+                        <div class="skn-modal-timeline-title">Uploaded</div>
+                        <div class="skn-modal-timeline-circle skn-bg-gray" *ngIf="!documentTimeline?.uploaded?.color_code"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-success" *ngIf="documentTimeline?.uploaded?.color_code == 'success'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-warning" *ngIf="documentTimeline?.uploaded?.color_code == 'in_progress'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-danger" *ngIf="documentTimeline?.uploaded?.color_code == 'failed'"></div>
+                        <div class="skn-modal-timeline-text">
+                            {{documentTimeline?.uploaded?.createdAt | date:'d MMM YY HH:mm'}}
+
+                        </div>
+                    </div>
+        
+                    <div class="skn-modal-timeline-item">
+                        <div class="skn-modal-timeline-title">SKENSE</div>
+                        <div class="skn-modal-timeline-circle skn-bg-gray" *ngIf="!documentTimeline?.skense?.color_code"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-success" *ngIf="documentTimeline?.skense?.color_code == 'success'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-warning" *ngIf="documentTimeline?.skense?.color_code == 'in_progress'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-danger" *ngIf="documentTimeline?.skense?.color_code == 'failed'"></div>
+                        <div class="skn-modal-timeline-text">
+                            {{documentTimeline?.skense?.createdAt | date:'d MMM YY HH:mm'}}
+                        </div>
+                    </div>
+        
+                    <div class="skn-modal-timeline-item">
+                        <div class="skn-modal-timeline-title">Analyst</div>                            
+                        <div class="skn-modal-timeline-circle skn-bg-gray" *ngIf="!documentTimeline?.analyst?.color_code"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-success" *ngIf="documentTimeline?.analyst?.color_code == 'success'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-warning" *ngIf="documentTimeline?.analyst?.color_code == 'in_progress'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-danger" *ngIf="documentTimeline?.analyst?.color_code == 'failed'"></div>
+                        <div class="skn-modal-timeline-text"  *ngFor="let analystDocumentLog of documentTimeline?.analyst?.logs; index as i;" >
+                            {{analystDocumentLog?.pickedAt | date:'d MMM YY HH:mm'}}
+                         <span *ngIf="analystDocumentLog?.review_time">({{analystDocumentLog?.user_id?.user_name}} - {{convertDurationToHMSformat(analystDocumentLog?.review_time)}})</span>   
+                        </div>
+                    </div>
+
+                    <div class="skn-modal-timeline-item">
+                        <div class="skn-modal-timeline-title">QC</div>
+                        <div class="skn-modal-timeline-circle skn-bg-gray" *ngIf="!documentTimeline?.qc?.color_code"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-success" *ngIf="documentTimeline?.qc?.color_code == 'success'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-warning" *ngIf="documentTimeline?.qc?.color_code == 'in_progress'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-danger" *ngIf="documentTimeline?.qc?.color_code == 'failed'"></div>
+                        <div class="skn-modal-timeline-text"  *ngFor="let qcDocumentLog of documentTimeline?.qc?.logs; index as i;"
+                        >
+                            {{qcDocumentLog?.pickedAt | date:'d MMM HH:mm'}}
+                           <span *ngIf="qcDocumentLog?.review_time">({{qcDocumentLog?.user_id?.user_name}} - {{convertDurationToHMSformat(qcDocumentLog?.review_time)}})</span> 
+                           <span *ngIf="qcDocumentLog?.review_time == null && qcDocumentLog?.user_id?.user_name">({{qcDocumentLog?.user_id?.user_name}})</span> 
+
+                        </div>
+                    </div>
+
+                    <div class="skn-modal-timeline-item">
+                        <div class="skn-modal-timeline-title">Completed</div>
+                        <div class="skn-modal-timeline-circle skn-bg-gray" *ngIf="!documentTimeline?.completed?.color_code"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-success" *ngIf="documentTimeline?.completed?.color_code == 'success'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-warning" *ngIf="documentTimeline?.completed?.color_code == 'in_progress'"></div>
+                        <div class="skn-modal-timeline-circle skn-bg-danger" *ngIf="documentTimeline?.completed?.color_code == 'failed'"></div>
+                        <div class="skn-modal-timeline-text" *ngIf="documentTimeline?.completed?.createdAt">
+                            {{documentTimeline?.completed?.createdAt| date:'d MMM  HH:mm'}}
+                            {{documentTimeline?.completed?.status == 'pushed_to_target'? '(auto)':''}}
+                        </div>
+                    </div>
+        
+                </div>
+                <!-- ============================================================= timeline-ends-here ========================================== -->
+        
+            </div>
+            <!-- ========================================================================================================================== -->
+        </div>
+        <!--===============================================================================================-->
+    </div>
+</div>
+</div>
+<!--=======================================================================================================-->

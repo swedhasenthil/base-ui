@@ -1,0 +1,13 @@
+{
+    "production": false,
+    "baseUrl": "http://localhost:3000/api",
+    "redirectUrl": "http://localhost:4200/",
+    "clientId": "654dcd05-696d-445e-9d0c-4c8f042e94f1",
+    "POST_LOGOUT_REDIRECT_URI": "http://localhost:4200/",
+    "NAVIGATION_TO_LOGIN": true,
+    "AUTHORITY": "https://login.microsoftonline.com/common/",
+    "VALIDATION_AUTHORITY": true,
+     "SESSION_TIMEOUT ": 30000
+   
+  }
+ 

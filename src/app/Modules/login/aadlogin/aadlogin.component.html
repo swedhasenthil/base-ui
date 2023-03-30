@@ -1,0 +1,46 @@
+<div class="skn-login-body d-flex align-items-center min-vh-100 py-3 py-md-0">
+    <div class="container p-3 login-width">
+        <div class="login-card login-banner-bg">
+            <div class="row no-gutters">
+                <div class="col-8">
+                    <div class="d-flex align-items-start flex-column mb-3" style="height: 500px;">
+                        <div class="sk-bar p-3">
+                            <img src="/assets/images/uap-skense-logo-dark.png"/>                  
+                        </div>
+                        <div class="login-hero-msg text-white d-none">
+                            <h1>Enterprise-grade Cognitive Data Capture and Processing Platform</h1>
+                            <h2>Convert unstructured data into contextualized information for actionable business insights</h2>
+                        </div>
+                        <div class="mt-auto copyrights p-2">© 2023 WNS.</div>
+                    </div>
+                </div>
+                <div class="col-4 login-wrapper">
+                    <div class="brand-wrapper c-logo text-right p-2">
+                        <i></i>
+                    </div>
+
+                    <div class="login-form p-2">
+                        <h3 class="login-card-description pt-2 pb-4">Signin to your account</h3>
+                        <p class="mb-3">Click on the below link to initiate Signin.</p>
+                        <div class="form-group" id="submit-button">
+                            <button class="w-100 btn-lg skn-filled-btn" *ngIf="!userLoggedIn && !loginError"
+                                (click)="login()">SSO Signin</button>
+                            <button class="w-100 btn-lg skn-filled-btn" *ngIf="userLoggedIn"
+                                (click)="logout()">Logout</button>
+                        </div>
+                        <div *ngIf="loginError" class="form-group" id="submit-button">
+                            <button class="w-100 btn-lg skn-filled-btn" (click)="logout()">Logout</button>
+                        </div>
+                        <div *ngIf="loginError" class="alert alert-danger" role="alert">
+                            <b>User is not registered. </b> Please Contact Admin.
+                        </div>
+                    </div>
+                    <div class="brand-wrapper w-logo text-right p-2">
+                        <i></i>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
